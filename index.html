@@ -5,398 +5,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>שו"ב פצועים — Roadmap</title>
 <style>
+  @import url("https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap");
   :root{
-    --bg:#F7F8FA; --surface:#FFFFFF; --surface-2:#F0F2F5;
-    --border:#DDE1E6; --border-strong:#C3C9D1;
-    --text:#1A2027; --text-2:#5B6472; --text-3:#8A93A0;
-    --accent:#1F3A5F; --accent-2:#2E5C8A;
-    --green:#1F9D6D; --green-bg:#E4F6EE;
-    --blue:#2E7BC4; --blue-bg:#E7F1FB;
-    --gray:#9CA3AF; --gray-bg:#F0F1F3;
-    --amber:#B9782E; --amber-bg:#FBF0E1;
-    --radius:10px;
-    --t1:#6D63C9; --t1bg:#EEECFA;
-    --t2:#0E9C93; --t2bg:#E2F6F4;
-    --t3:#C4622E; --t3bg:#FBEBE1;
-    --t4:#B84C86; --t4bg:#FAE7F1;
-    --t5:#B08A1F; --t5bg:#FBF3DC;
-    --t6:#2E6FB8; --t6bg:#E7F0FA;
-    --t7:#6B7280; --t7bg:#EEEFF1;
-    --t8:#3B3F46; --t8bg:#E9EAEC;
+    --white:#fff; --neutral-50:#fafafa; --neutral-100:#f5f5f5; --neutral-200:#e5e5e5; --neutral-300:#d4d4d4;
+    --neutral-400:#a3a3a3; --neutral-500:#737373; --neutral-600:#525252; --neutral-700:#404040; --neutral-800:#262626; --neutral-900:#171717; --neutral-950:#0a0a0a;
+    --background:var(--white); --foreground:var(--neutral-950); --card:var(--white); --card-foreground:var(--neutral-950);
+    --sidebar:var(--neutral-50); --muted:var(--neutral-100); --muted-foreground:var(--neutral-500);
+    --border:var(--neutral-200); --input:var(--neutral-200); --primary:var(--neutral-900); --primary-foreground:var(--neutral-50);
+    --accent:var(--neutral-100); --accent-foreground:var(--neutral-900);
+    --shadow-sm:0px 1px 2px 0px rgba(0,0,0,.1); --shadow-overlay:0px 10px 15px -3px rgba(0,0,0,.1),0px 4px 6px -4px rgba(0,0,0,.1);
+    --overlay-scrim:rgba(0,0,0,.3); --font-hebrew:"Heebo","Arial Hebrew","Noto Sans Hebrew",sans-serif;
+    --accent-blue:rgb(0,144,255); --accent-blue-deep:rgb(13,116,206);
+    --indigo-50:rgb(238,242,255); --indigo-500:rgb(99,102,241); --indigo-700:rgb(67,56,202);
+    --cyan-50:rgb(236,254,255); --cyan-600:rgb(8,145,178); --cyan-700:rgb(14,116,144);
+    --orange-50:rgb(255,247,237); --orange-500:rgb(249,115,22); --orange-700:rgb(194,65,12);
+    --fuchsia-50:rgb(253,244,255); --fuchsia-500:rgb(217,70,239); --fuchsia-700:rgb(162,28,175);
+    --amber-50:rgb(255,251,235); --amber-500:rgb(245,158,11); --amber-700:rgb(180,83,9);
+    --blue-50:rgb(239,246,255); --blue-300:rgb(147,197,253); --blue-500:rgb(59,130,246); --blue-700:rgb(29,78,216);
+    --gray-100:rgb(243,244,246); --gray-400:rgb(156,163,175); --gray-500:rgb(107,114,128); --gray-600:rgb(75,85,99); --gray-700:rgb(55,65,81);
+    --neutral-track-100:var(--neutral-100); --neutral-track-600:var(--neutral-600); --neutral-track-700:var(--neutral-700);
+    --emerald-50:rgb(236,253,245); --emerald-500:rgb(16,185,129); --emerald-700:rgb(4,120,87);
+    --red-50:rgb(254,242,242); --red-500:rgb(239,68,68); --red-600:rgb(220,38,38); --red-700:rgb(185,28,28);
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --bg:#12161C; --surface:#1A2028; --surface-2:#212832;
-      --border:#2C3440; --border-strong:#3A4351;
-      --text:#E7EAEE; --text-2:#AAB2BE; --text-3:#7C8593;
-      --accent:#7FA8D9; --accent-2:#9CC0E8;
-      --green:#4FCB94; --green-bg:#123024;
-      --blue:#6FA9E6; --blue-bg:#132A40;
-      --gray:#8B93A0; --gray-bg:#22262C;
-      --amber:#E0A85C; --amber-bg:#332612;
-      --t1:#A79CEE; --t1bg:#241F3E; --t2:#4FD9CC; --t2bg:#0F2E2B;
-      --t3:#E08F5C; --t3bg:#33200F; --t4:#E084B8; --t4bg:#331E2A;
-      --t5:#E0C15C; --t5bg:#332B10; --t6:#7FB0E8; --t6bg:#182B3E;
-      --t7:#AAB0BA; --t7bg:#24262A; --t8:#B9BEC6; --t8bg:#25272B;
+      --background:var(--neutral-950); --foreground:var(--neutral-50); --card:var(--neutral-900); --card-foreground:var(--neutral-50);
+      --sidebar:var(--neutral-900); --muted:var(--neutral-800); --muted-foreground:var(--neutral-400);
+      --border:var(--neutral-700); --input:var(--neutral-900); --primary:var(--neutral-200); --primary-foreground:var(--neutral-900);
+      --accent:var(--neutral-700); --accent-foreground:var(--neutral-50);
     }
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Segoe UI",sans-serif;line-height:1.5;}
-  header{padding:20px 28px 0;}
-  h1{font-size:22px;font-weight:700;margin:0 0 2px;color:var(--accent);}
-  .sub{font-size:13px;color:var(--text-3);margin-bottom:16px;}
-  nav{display:flex;gap:4px;border-bottom:1px solid var(--border);padding:0 28px;flex-wrap:wrap;}
-  nav button{background:none;border:none;padding:10px 16px;font-size:14px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;}
-  nav button.active{color:var(--accent);border-bottom:2px solid var(--accent);font-weight:700;}
-  main{padding:20px 28px 60px;max-width:1400px;margin:0 auto;}
-  .view{display:none;}
-  .view.active{display:block;}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
-  .tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;}
-  .status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:5px;}
-  .status-done{background:var(--green);} .status-ongoing{background:var(--blue);} .status-planned{background:var(--gray);}
-  .status-label{font-size:12px;color:var(--text-2);}
-  .track-title{font-size:15px;font-weight:700;margin:0 0 6px;}
-  .track-meta{font-size:12px;color:var(--text-3);margin-bottom:10px;}
-  .counts{display:flex;gap:10px;font-size:12px;color:var(--text-2);}
-  table{width:100%;border-collapse:collapse;font-size:13px;}
-  th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--border);vertical-align:top;}
-  th{color:var(--text-3);font-weight:700;font-size:12px;background:var(--surface-2);}
-  tr:hover td{background:var(--surface-2);}
-  .btn{background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:700;}
-  .btn:hover{background:var(--accent-2);}
-  .btn-ghost{background:none;border:1px solid var(--border-strong);color:var(--text-2);padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;}
-  .btn-icon{background:none;border:none;cursor:pointer;color:var(--text-3);font-size:13px;padding:3px 6px;}
-  .btn-icon:hover{color:var(--text);}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;}
-  .form-grid label{display:flex;flex-direction:column;font-size:12px;color:var(--text-2);gap:4px;}
-  .form-grid input,.form-grid select,.form-grid textarea{padding:8px;border:1px solid var(--border-strong);border-radius:6px;background:var(--surface);color:var(--text);font-family:inherit;font-size:13px;}
-  .form-grid textarea{resize:vertical;min-height:40px;}
-  .full{grid-column:1/-1;}
-  .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;flex-wrap:wrap;}
-  select.filter,input.filter{padding:6px 8px;border:1px solid var(--border-strong);border-radius:6px;background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;width:100%;max-width:130px;}
-  thead tr:nth-child(2) th{background:var(--surface);padding:6px;position:static;}
-  .empty{color:var(--text-3);font-size:13px;padding:20px;text-align:center;}
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:99;}
-  .toast.show{opacity:1;}
-  .gantt-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);}
-  .gantt{border-collapse:collapse;font-size:12px;min-width:1100px;}
-  .gantt th{position:sticky;top:0;background:var(--surface-2);z-index:2;}
-  .gantt td,.gantt th{border:1px solid var(--border);padding:0;height:30px;text-align:center;min-width:26px;}
-  .gantt .rowlabel{position:sticky;right:0;background:var(--surface);z-index:1;text-align:right;padding:4px 10px;min-width:230px;max-width:230px;font-size:12px;white-space:normal;}
-  .gantt .tracklabel{position:sticky;right:0;background:var(--surface-2);z-index:1;text-align:right;padding:6px 10px;font-weight:700;font-size:12px;}
-  .bar{height:16px;border-radius:3px;margin:auto;}
-  .unscheduled{margin-top:16px;}
-  .chip{display:inline-block;background:var(--gray-bg);color:var(--text-2);font-size:12px;padding:4px 10px;border-radius:14px;margin:3px 4px 0 0;border:1px dashed var(--border-strong);}
-  .legend{display:flex;gap:16px;font-size:12px;color:var(--text-2);margin-top:10px;align-items:center;flex-wrap:wrap;}
-  .legend span{display:inline-flex;align-items:center;gap:5px;}
-  .swatch{width:12px;height:12px;border-radius:3px;display:inline-block;}
-  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:50;}
-  .modal-bg.show{display:flex;}
-  .modal{background:var(--surface);border-radius:var(--radius);padding:20px;width:min(560px,92vw);max-height:85vh;overflow:auto;}
-  .modal h3{margin:0 0 12px;font-size:16px;}
-  .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;}
-  .save-state{font-size:11px;color:var(--text-3);}
+  body{margin:0;background:var(--background);}
+  a{color:var(--accent-blue);} a:hover{color:var(--accent-blue-deep);}
+  input,select,textarea,button{font-family:inherit;}
+  @keyframes shimmer{0%{opacity:.55}50%{opacity:1}100%{opacity:.55}}
+  #app{display:flex;min-height:100vh;background:var(--background);color:var(--foreground);font-family:var(--font-hebrew);font-size:14px;line-height:1.5;}
 </style>
 </head>
 <body>
-
-<header>
-  <h1>שו"ב פצועים — Roadmap</h1>
-  <div class="sub">חיל הרפואה — ענף הרפואה המבצעית · הנתונים משותפים לכל מי שפותח את הקישור · <span class="save-state" id="saveState">טוען...</span></div>
-</header>
-
-<nav>
-  <button data-tab="dashboard" class="active">סקירה כללית</button>
-  <button data-tab="gantt">גאנט אבני דרך</button>
-  <button data-tab="partners">מפת שותפים</button>
-  <button data-tab="items">ניהול משימות</button>
-  <button data-tab="tracks">טראקים</button>
-  <button data-tab="reqApp">שיפורים אפליקציה</button>
-  <button data-tab="reqDash">שיפורים דשבורד</button>
-  <button data-tab="trainings">תיעוד הדרכות</button>
-</nav>
-
-<main>
-
-  <section class="view active" id="view-dashboard">
-    <div class="grid" id="dashboardGrid"></div>
-  </section>
-
-  <section class="view" id="view-gantt">
-    <div class="card">
-      <div class="gantt-wrap"><table class="gantt" id="ganttTable"></table></div>
-      <div class="legend">
-        <span><span class="swatch" style="background:var(--green)"></span>הושלם</span>
-        <span><span class="swatch" style="background:var(--blue)"></span>בתהליך</span>
-        <span><span class="swatch" style="background:var(--gray)"></span>מתוכנן</span>
-      </div>
-    </div>
-    <div class="card unscheduled">
-      <div class="track-title">אבני דרך ללא תאריך (TBD)</div>
-      <div id="unscheduledList"></div>
-    </div>
-  </section>
-
-  <section class="view" id="view-partners">
-    <div class="card">
-      <div class="track-title" style="margin-bottom:10px;">הוספת שותף</div>
-      <div class="form-grid" id="partnerAddForm">
-        <label>שם השותף / הגורם<input id="p-name" type="text" placeholder="לדוגמה: קצין קישור בתי חולים"></label>
-        <label>תפקיד בפרויקט<input id="p-role" type="text" placeholder="לדוגמה: מתאם מול מערכות בתי החולים"></label>
-        <label class="full">טראקים רלוונטיים<select id="p-tracks" multiple size="4"></select></label>
-        <label class="full">הערות<textarea id="p-notes"></textarea></label>
-      </div>
-      <div style="margin-top:12px;"><button class="btn" onclick="addPartner()">הוספה</button></div>
-    </div>
-    <div class="card">
-      <div class="track-title" style="margin-bottom:10px;">כל השותפים</div>
-      <table>
-        <thead><tr><th>שותף / גורם</th><th>תפקיד</th><th>טראקים</th><th>פריטים מקושרים</th><th></th></tr></thead>
-        <tbody id="partnersBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="view" id="view-items">
-    <div class="card">
-      <div class="track-title" style="margin-bottom:10px;">הוספת פריט חדש</div>
-      <div class="form-grid" id="addForm">
-        <label>טראק<select id="f-track"></select></label>
-        <label>סוג<select id="f-type"><option value="task">משימה</option><option value="milestone">אבן דרך</option></select></label>
-        <label class="full">שם הפריט<input id="f-name" type="text" placeholder="לדוגמה: בדיקות אינטגרציה"></label>
-        <label>שותף / אחראי<input id="f-owner" type="text" placeholder="לדוגמה: צוות פיתוח פנימי"></label>
-        <label>סטטוס<select id="f-status"><option value="planned">מתוכנן</option><option value="ongoing">בתהליך</option><option value="done">הושלם</option></select></label>
-        <label>תאריך התחלה<input id="f-start" type="date"></label>
-        <label>תאריך סיום<input id="f-end" type="date"></label>
-        <label class="full">הערות<textarea id="f-notes"></textarea></label>
-      </div>
-      <div style="margin-top:12px;"><button class="btn" onclick="addItem()">הוספה</button></div>
-    </div>
-
-    <div class="card">
-      <div class="toolbar">
-        <div class="track-title">כל הפריטים</div>
-        <button class="btn-ghost" onclick="clearItemFilters()">ניקוי סינון</button>
-      </div>
-      <table>
-        <thead>
-          <tr><th>טראק</th><th>שם</th><th>סוג</th><th>שותף</th><th>סטטוס</th><th>התחלה</th><th>סיום</th><th></th></tr>
-          <tr>
-            <th><select class="filter" id="itemsFilterTrack" onchange="renderItems()"><option value="">הכל</option></select></th>
-            <th><input class="filter" id="itemsFilterName" type="text" placeholder="חיפוש..." oninput="renderItems()"></th>
-            <th><select class="filter" id="itemsFilterType" onchange="renderItems()">
-              <option value="">הכל</option><option value="task">משימה</option><option value="milestone">אבן דרך</option>
-            </select></th>
-            <th><input class="filter" id="itemsFilterOwner" type="text" placeholder="חיפוש..." oninput="renderItems()"></th>
-            <th><select class="filter" id="itemsFilterStatus" onchange="renderItems()">
-              <option value="">הכל</option><option value="planned">מתוכנן</option><option value="ongoing">בתהליך</option><option value="done">הושלם</option>
-            </select></th>
-            <th><input class="filter" id="itemsFilterStart" type="text" placeholder="לדוגמה 2026-04"  oninput="renderItems()"></th>
-            <th><input class="filter" id="itemsFilterEnd" type="text" placeholder="לדוגמה 2026-04" oninput="renderItems()"></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="itemsBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="view" id="view-tracks">
-    <div class="card">
-      <div class="toolbar">
-        <div class="track-title">טראקים</div>
-      </div>
-      <div class="form-grid" style="margin-bottom:14px;">
-        <label class="full">שם טראק חדש<input id="newTrackName" type="text" placeholder="לדוגמה: אבטחת מידע"></label>
-      </div>
-      <button class="btn" onclick="addTrack()">הוספת טראק</button>
-      <table style="margin-top:16px;">
-        <thead><tr><th>טראק</th><th>מספר פריטים</th><th></th></tr></thead>
-        <tbody id="tracksBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="view" id="view-reqApp">
-    <div class="card">
-      <div class="track-title" style="margin-bottom:10px;">בקשת שיפור חדשה — אפליקציה</div>
-      <div class="form-grid">
-        <label class="full">תיאור הבקשה<input id="ra-title" type="text" placeholder="לדוגמה: הוספת שדה חובה למספר אסמכתא"></label>
-        <label>תאריך הבקשה<input id="ra-date" type="date"></label>
-        <label>מבקש<input id="ra-requester" type="text" placeholder="לדוגמה: מפקד פלוגה"></label>
-        <label>דחיפות<select id="ra-urgency">
-          <option value="low">נמוכה</option><option value="medium" selected>בינונית</option><option value="high">גבוהה</option><option value="urgent">דחופה</option>
-        </select></label>
-        <label>סטטוס<select id="ra-status">
-          <option value="pending" selected>ממתין לבדיקה</option><option value="approved">אושר לפיתוח</option><option value="inprogress">בפיתוח</option><option value="done">הושלם</option><option value="rejected">נדחה</option>
-        </select></label>
-        <label class="full">הערות<textarea id="ra-notes"></textarea></label>
-      </div>
-      <div style="margin-top:12px;"><button class="btn" onclick="addRequest('app')">הוספה</button></div>
-    </div>
-    <div class="card">
-      <div class="toolbar">
-        <div class="track-title">כל בקשות השיפור — אפליקציה (ממוין לפי תאריך, מהישן לחדש)</div>
-        <select class="filter" id="raFilterUrgency" onchange="renderRequests()">
-          <option value="">כל הדחיפויות</option>
-          <option value="low">נמוכה</option><option value="medium">בינונית</option><option value="high">גבוהה</option><option value="urgent">דחופה</option>
-        </select>
-      </div>
-      <table>
-        <thead><tr><th>תיאור</th><th>תאריך בקשה</th><th>מבקש</th><th>דחיפות</th><th>סטטוס</th><th></th></tr></thead>
-        <tbody id="raBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="view" id="view-reqDash">
-    <div class="card">
-      <div class="track-title" style="margin-bottom:10px;">בקשת שיפור חדשה — דשבורד</div>
-      <div class="form-grid">
-        <label class="full">תיאור הבקשה<input id="rd-title" type="text" placeholder="לדוגמה: הוספת פילטר לפי יחידה"></label>
-        <label>תאריך הבקשה<input id="rd-date" type="date"></label>
-        <label>מבקש<input id="rd-requester" type="text" placeholder="לדוגמה: קצין רפואה ראשי"></label>
-        <label>דחיפות<select id="rd-urgency">
-          <option value="low">נמוכה</option><option value="medium" selected>בינונית</option><option value="high">גבוהה</option><option value="urgent">דחופה</option>
-        </select></label>
-        <label>סטטוס<select id="rd-status">
-          <option value="pending" selected>ממתין לבדיקה</option><option value="approved">אושר לפיתוח</option><option value="inprogress">בפיתוח</option><option value="done">הושלם</option><option value="rejected">נדחה</option>
-        </select></label>
-        <label class="full">הערות<textarea id="rd-notes"></textarea></label>
-      </div>
-      <div style="margin-top:12px;"><button class="btn" onclick="addRequest('dash')">הוספה</button></div>
-    </div>
-    <div class="card">
-      <div class="toolbar">
-        <div class="track-title">כל בקשות השיפור — דשבורד (ממוין לפי תאריך, מהישן לחדש)</div>
-        <select class="filter" id="rdFilterUrgency" onchange="renderRequests()">
-          <option value="">כל הדחיפויות</option>
-          <option value="low">נמוכה</option><option value="medium">בינונית</option><option value="high">גבוהה</option><option value="urgent">דחופה</option>
-        </select>
-      </div>
-      <table>
-        <thead><tr><th>תיאור</th><th>תאריך בקשה</th><th>מבקש</th><th>דחיפות</th><th>סטטוס</th><th></th></tr></thead>
-        <tbody id="rdBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="view" id="view-trainings">
-    <div class="card">
-      <div class="track-title" style="margin-bottom:10px;">תיעוד הדרכה חדשה</div>
-      <div class="form-grid">
-        <label>יחידה<input id="tr-unit" type="text" placeholder="לדוגמה: גדוד 7031"></label>
-        <label>תאריך ההדרכה<input id="tr-date" type="date"></label>
-        <label>מי הדריך<input id="tr-instructor" type="text" placeholder="לדוגמה: אחראי הטמעה והדרכה"></label>
-        <label class="full">הערות<textarea id="tr-notes"></textarea></label>
-      </div>
-      <div style="margin-top:12px;"><button class="btn" onclick="addTraining()">הוספה</button></div>
-    </div>
-    <div class="card">
-      <div class="toolbar">
-        <div class="track-title">כל ההדרכות (ממוין לפי תאריך, מהחדש לישן)</div>
-        <input class="filter" id="trFilterUnit" type="text" placeholder="סינון לפי יחידה..." oninput="renderTrainings()" style="max-width:180px;">
-      </div>
-      <table>
-        <thead><tr><th>יחידה</th><th>תאריך</th><th>מדריך</th><th>הערות</th><th></th></tr></thead>
-        <tbody id="trainingsBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-</main>
-
-<div class="modal-bg" id="editModalBg">
-  <div class="modal">
-    <h3>עריכת פריט</h3>
-    <div class="form-grid">
-      <label>טראק<select id="e-track"></select></label>
-      <label>סוג<select id="e-type"><option value="task">משימה</option><option value="milestone">אבן דרך</option></select></label>
-      <label class="full">שם הפריט<input id="e-name" type="text"></label>
-      <label>שותף / אחראי<input id="e-owner" type="text"></label>
-      <label>סטטוס<select id="e-status"><option value="planned">מתוכנן</option><option value="ongoing">בתהליך</option><option value="done">הושלם</option></select></label>
-      <label>תאריך התחלה<input id="e-start" type="date"></label>
-      <label>תאריך סיום<input id="e-end" type="date"></label>
-      <label class="full">הערות<textarea id="e-notes"></textarea></label>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeEdit()">ביטול</button>
-      <button class="btn" onclick="saveEdit()">שמירה</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-bg" id="editPartnerModalBg">
-  <div class="modal">
-    <h3>עריכת שותף</h3>
-    <div class="form-grid">
-      <label>שם השותף / הגורם<input id="pe-name" type="text"></label>
-      <label>תפקיד בפרויקט<input id="pe-role" type="text"></label>
-      <label class="full">טראקים רלוונטיים<select id="pe-tracks" multiple size="4"></select></label>
-      <label class="full">הערות<textarea id="pe-notes"></textarea></label>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closePartnerEdit()">ביטול</button>
-      <button class="btn" onclick="savePartnerEdit()">שמירה</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-bg" id="editRequestModalBg">
-  <div class="modal">
-    <h3>עריכת בקשת שיפור</h3>
-    <div class="form-grid">
-      <label class="full">תיאור הבקשה<input id="re-title" type="text"></label>
-      <label>תאריך הבקשה<input id="re-date" type="date"></label>
-      <label>מבקש<input id="re-requester" type="text"></label>
-      <label>דחיפות<select id="re-urgency">
-        <option value="low">נמוכה</option><option value="medium">בינונית</option><option value="high">גבוהה</option><option value="urgent">דחופה</option>
-      </select></label>
-      <label>סטטוס<select id="re-status">
-        <option value="pending">ממתין לבדיקה</option><option value="approved">אושר לפיתוח</option><option value="inprogress">בפיתוח</option><option value="done">הושלם</option><option value="rejected">נדחה</option>
-      </select></label>
-      <label class="full">הערות<textarea id="re-notes"></textarea></label>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeRequestEdit()">ביטול</button>
-      <button class="btn" onclick="saveRequestEdit()">שמירה</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-bg" id="editTrainingModalBg">
-  <div class="modal">
-    <h3>עריכת הדרכה</h3>
-    <div class="form-grid">
-      <label>יחידה<input id="te-unit" type="text"></label>
-      <label>תאריך ההדרכה<input id="te-date" type="date"></label>
-      <label>מי הדריך<input id="te-instructor" type="text"></label>
-      <label class="full">הערות<textarea id="te-notes"></textarea></label>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeTrainingEdit()">ביטול</button>
-      <button class="btn" onclick="saveTrainingEdit()">שמירה</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-bg" id="confirmModalBg">
-  <div class="modal" style="width:min(360px,90vw);">
-    <h3 id="confirmMessage">לאשר?</h3>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="confirmNo()">ביטול</button>
-      <button class="btn" onclick="confirmYes()">מחיקה</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
+<div id="app"></div>
 <script>
-// ==== הגדרות Firebase — למלא לאחר יצירת פרויקט ב-https://console.firebase.google.com ====
-// יש להעתיק לכאן את firebaseConfig מהגדרות הפרויקט (Project settings > General > Your apps > SDK setup and configuration)
+// ==== הגדרות Firebase ====
 const firebaseConfig = {
   apiKey: "AIzaSyD5SvOo9polfrM-9w5jcY2f5E-vsBDmboQ",
   authDomain: "shov-refua-roadmap.firebaseapp.com",
@@ -405,28 +55,70 @@ const firebaseConfig = {
   messagingSenderId: "115846628361",
   appId: "1:115846628361:web:68a1ccfbd1276a14ad64d8"
 };
-// ==========================================================================================
-
 const STORAGE_KEY = 'shov_ptzuim_roadmap_v1';
-const COLORS = ['t1','t2','t3','t4','t5','t6','t7','t8'];
-let state = { tracks: [], items: [], partners: [], requests: [], trainings: [], nextTrackId: 1, nextItemId: 1, nextPartnerId: 1, nextRequestId: 1, nextTrainingId: 1 };
-let editingPartnerId = null;
-let editingRequestId = null;
-let editingTrainingId = null;
-let editingId = null;
 
+// ==== Design tokens (mirrors ds/ token values) ====
+const TRACK_COLORS = [
+  { bg: 'var(--indigo-50)', fg: 'var(--indigo-700)', solid: 'var(--indigo-500)' },
+  { bg: 'var(--cyan-50)', fg: 'var(--cyan-700)', solid: 'var(--cyan-600)' },
+  { bg: 'var(--orange-50)', fg: 'var(--orange-700)', solid: 'var(--orange-500)' },
+  { bg: 'var(--fuchsia-50)', fg: 'var(--fuchsia-700)', solid: 'var(--fuchsia-500)' },
+  { bg: 'var(--amber-50)', fg: 'var(--amber-700)', solid: 'var(--amber-500)' },
+  { bg: 'var(--blue-50)', fg: 'var(--blue-700)', solid: 'var(--blue-500)' },
+  { bg: 'var(--gray-100)', fg: 'var(--gray-700)', solid: 'var(--gray-500)' },
+  { bg: 'var(--neutral-track-100)', fg: 'var(--neutral-track-700)', solid: 'var(--neutral-track-600)' }
+];
+const STATUS = {
+  done: { label: 'הושלם', bg: 'var(--emerald-50)', fg: 'var(--emerald-700)', solid: 'var(--emerald-500)' },
+  ongoing: { label: 'בתהליך', bg: 'var(--blue-50)', fg: 'var(--blue-700)', solid: 'var(--blue-500)' },
+  planned: { label: 'מתוכנן', bg: 'var(--gray-100)', fg: 'var(--gray-600)', solid: 'var(--gray-400)' }
+};
+const URGENCY = {
+  urgent: { label: 'דחופה', bg: 'var(--red-50)', fg: 'var(--red-700)' },
+  high: { label: 'גבוהה', bg: 'var(--orange-50)', fg: 'var(--orange-700)' },
+  medium: { label: 'בינונית', bg: 'var(--amber-50)', fg: 'var(--amber-700)' },
+  low: { label: 'נמוכה', bg: 'var(--gray-100)', fg: 'var(--gray-600)' }
+};
+const REQ_STATUS_ORDER = ['pending','approved','inprogress','done','rejected'];
+const REQ_STATUS = {
+  pending: { label: 'ממתין לבדיקה', bg: 'var(--gray-100)', fg: 'var(--gray-700)', solid: 'var(--gray-400)' },
+  approved: { label: 'אושר לפיתוח', bg: 'var(--indigo-50)', fg: 'var(--indigo-700)', solid: 'var(--indigo-500)' },
+  inprogress: { label: 'בפיתוח', bg: 'var(--blue-50)', fg: 'var(--blue-700)', solid: 'var(--blue-500)' },
+  done: { label: 'הושלם', bg: 'var(--emerald-50)', fg: 'var(--emerald-700)', solid: 'var(--emerald-500)' },
+  rejected: { label: 'נדחה', bg: 'var(--red-50)', fg: 'var(--red-700)', solid: 'var(--red-500)' }
+};
+
+const NAV_MAIN = [
+  { id: 'overview', label: 'סקירה כללית' },
+  { id: 'gantt', label: 'גאנט אבני דרך' },
+  { id: 'items', label: 'ניהול משימות' }
+];
+const NAV_REST = [
+  { id: 'partners', label: 'מפת שותפים' },
+  { id: 'tracks', label: 'טראקים' },
+  { id: 'reqApp', label: 'שיפורים — אפליקציה' },
+  { id: 'reqDash', label: 'שיפורים — דשבורד' },
+  { id: 'trainings', label: 'תיעוד הדרכות' }
+];
+const TITLES = { overview:'סקירה כללית', gantt:'גאנט אבני דרך', items:'ניהול משימות', partners:'מפת שותפים', tracks:'טראקים', reqApp:'שיפורים — אפליקציה', reqDash:'שיפורים — דשבורד', trainings:'תיעוד הדרכות' };
+const SUBTITLES = {
+  overview: 'תמונת מצב אחת לכלל השותפים בפרויקט',
+  gantt: 'אבני דרך על ציר זמן, כולל אלה שטרם תוארכו',
+  items: 'משימות ואבני דרך לפי טראק, שותף וסטטוס',
+  partners: 'מי אחראי על מה, ולאיזה טראקים כל גורם מקושר',
+  tracks: 'ניהול רשימת הטראקים של הפרויקט',
+  reqApp: 'בקשות שיפור שהתקבלו מהשטח, לפי סטטוס טיפול ודחיפות',
+  reqDash: 'בקשות שיפור לדשבורד הרפואי',
+  trainings: 'תיעוד הדרכות ביחידות, לפי יחידה ומדריך'
+};
+
+// ==== Seed data (canonical content) ====
 function seed(){
   const tracks = [
-    {id:1,name:'פיתוח אפליקציה'},
-    {id:2,name:'פיתוח דשבורד'},
-    {id:3,name:'פריסת המכשירים ביחידות'},
-    {id:4,name:'הטמעה והדרכה'},
-    {id:5,name:'התממשקות למוניטור'},
-    {id:6,name:'חיבוריות למערכות נוספות (בתי"ח / מנפ"ץ)'},
-    {id:7,name:'מערכות משלימות (נוה"ק רפואה, STT)'},
-    {id:8,name:'פריסה כללית (אבני דרך על)'}
-  ].map((t,i)=>({...t, color: COLORS[i % COLORS.length]}));
-
+    {id:1,name:'פיתוח אפליקציה'},{id:2,name:'פיתוח דשבורד'},{id:3,name:'פריסת המכשירים ביחידות'},
+    {id:4,name:'הטמעה והדרכה'},{id:5,name:'התממשקות למוניטור'},{id:6,name:'חיבוריות למערכות נוספות (בתי"ח / מנפ"ץ)'},
+    {id:7,name:'מערכות משלימות (נוה"ק רפואה, STT)'},{id:8,name:'פריסה כללית (אבני דרך על)'}
+  ];
   const items = [
     {track:1,name:'ניסוי מבצעי',type:'milestone',owner:'מנהל מוצר, נציגי משתמשים בשטח',status:'done',start:'2026-04-01',end:'2026-05-01',notes:'הבסיס למשוב על הגרסה הראשונה'},
     {track:1,name:'איסוף ותיעוד משוב משתמשים מהניסוי',type:'task',owner:'מנהל מוצר',status:'ongoing',start:null,end:null,notes:''},
@@ -442,8 +134,7 @@ function seed(){
     {track:8,name:'מדרגת הצטיידות ראשונה',type:'milestone',owner:'',status:'planned',start:null,end:null,notes:''},
     {track:8,name:'מדרגת הצטיידות שנייה',type:'milestone',owner:'',status:'planned',start:null,end:null,notes:''},
     {track:8,name:'כלל היחידות (פריסה מלאה)',type:'milestone',owner:'',status:'planned',start:null,end:null,notes:''}
-  ].map((it,i)=>({...it, id:i+1}));
-
+  ].map((it,i)=>({...it,id:i+1}));
   const partners = [
     {name:'מנהל מוצר', role:'מתאם בין הצוות המפתח, המעצב וגורמי אבטחת המידע', tracks:[1], notes:''},
     {name:'צוות פיתוח פנימי', role:'פיתוח האפליקציה והדשבורד', tracks:[1,2], notes:'צוות פנימי (צה"ל / חיל הרפואה)'},
@@ -453,700 +144,822 @@ function seed(){
     {name:'גורמי רפואה', role:'ניתוח הנתונים המוצגים בדשבורד', tracks:[2], notes:''},
     {name:'אחראי הטמעה והדרכה', role:'ביצוע הדרכות ליחידות', tracks:[4], notes:''},
     {name:'בה"ד 10', role:'ביצוע הדרכות במסגרת קורסים', tracks:[4], notes:'מסגרת הכשרה'}
-  ].map((p,i)=>({...p, id:i+1}));
-
-  return { tracks, items, partners, requests: [], trainings: [], nextTrackId: 9, nextItemId: items.length+1, nextPartnerId: partners.length+1, nextRequestId: 1, nextTrainingId: 1 };
+  ].map((p,i)=>({...p,id:i+1}));
+  const APP_REQ_RAW = [
+    ['עדכון אפליקציה לפי סכמת X-CARE','רפמ"צ','low','pending','גירסא הבאה - מורכבות בהעברת מידע ברשתות',''],
+    ['משיכת פצועים בין יחידות לא רק לפי עץ ציוות מלמטה למעלה אלא גם שגדוד ימשוך מחטיבה','אבלואציה מבצעית','medium','pending','הערכת ביצוע: בינוני',''],
+    ['העברת המידע בטבלת שליטה בברקוד ולא פצוע בודד','אבלואציה מבצעית','low','pending','',''],
+    ['בסיכום פצוע בודד - במצב בהיר גופן שהוא לא אפור למדדים כי לא רואים','אבלואציה מבצעית','medium','inprogress','הערכת ביצוע: קל',''],
+    ['בסיכום פצוע בודד - להוסיף שם פצוע ומספר כרטיס פינוי, ודחיפות פינוי','אבלואציה מבצעית','urgent','inprogress','הערכת ביצוע: קל',''],
+    ['להוריד מקרא של מיקומי פציעות - מבלבל ומשתמשים לוחצים על זה במקום על הגוף','אבלואציה מבצעית','low','pending','הערכת ביצוע: קל; לוודא פידבקים נוספים',''],
+    ['הוספת מספר כרטיס פינוי ב-7 השאלות בטבלת שליטה ולהוריד כתיבת דחיפות פינוי','אבלואציה מבצעית','high','inprogress','הערכת ביצוע: קל',''],
+    ['הפיכת כפתור "הוסף" ו"ביטול" בתוך הטופס לאחר טיפול לבולט יותר וצבע שונה','אבלואציה מבצעית','medium','inprogress','הערכת ביצוע: קל',''],
+    ['הוספת לחצן "ל"ד לא נמדד" מתחת למדידת ל"ד (כמו ברדיאלי לא נימוש)','אבלואציה מבצעית','low','pending','הערכת ביצוע: קשה; לשמור לגרסת גשר',''],
+    ['להוריד טנ"צ לעץ ציוות אוגדתי','אבלואציה מבצעית','low','pending','שינוי בעץ ציוות - טנ"צ הוא חטיבתי',''],
+    ['הוספת מקצוע בהתחלה - מנ"א (מנהל אירוע)','אבלואציה מבצעית','low','pending','מנ"א = מנהל אירוע',''],
+    ['בטיפול תרופתי להוסיף: "אחר" תחתיו יהיה פרמין, מידזולם','אבלואציה מבצעית','low','pending','הערכת ביצוע: קשה; לשמור לגרסת גשר',''],
+    ['פצועים במסך "אירועים פתוחים" שם מספר כרטיס דחיפות','אבלואציה מבצעית','high','inprogress','',''],
+    ['בסטורציה - תיבת סימון של "לא נמדד"','אבלואציה מבצעית','low','pending','הערכת ביצוע: קשה',''],
+    ['במיקומי פציעות - אופציה להזזת המיקום על גבי התמונה בנוסף לאופציה של מחיקה','אבלואציה מבצעית','low','pending','לוודא פידבקים נוספים',''],
+    ['בגלילת טופס 101 - שיופיע למעלה שם הפצוע ודחיפות','אבלואציה מבצעית','high','inprogress','הערכת ביצוע: קל',''],
+    ['אופציה לכתוב פרוצדורות מתוכננות ולאחר מכן לסמן שהן בוצעו','אבלואציה מבצעית','high','inprogress','נתחיל מטקסט חופשי בטבלת שליטה',''],
+    ['רטט בקבלת פצוע דחוף חדש באול"ר','חיל רפואה','medium','pending','יש צורך שהאפליקציה תרוץ ברקע יאנוס את הסוללה',''],
+    ['העברת פצוע בעזרת ברקוד מוחקת את הפצוע מהאול"ר - צריך להפוך אותו לאפור','אבלואציה מבצעית','medium','pending','הערכת ביצוע: קל',''],
+    ['התראה באפליקציה שאין רשת','אבלואציה מבצעית','urgent','pending','אין חיווי לגבי ה-VPN',''],
+    ['השלמת מילים אוטומטית בזמן כתיבה חופשית','אבלואציה מבצעית','urgent','pending','יכנס רק בגרסת אול"ר הבאה',''],
+    ['בסוף הטופס - אין צורך גם בסיווג פצוע וגם בסיווג פינוי - להוריד סיווג פינוי','אבלואציה מבצעית','medium','pending','',''],
+    ['הוספת קריטריונים בסיווג פצוע: דחוף, לא דחוף, ממתין, תגובת קרב','אבלואציה מבצעית','low','pending','',''],
+    ['יצירת ישות של פלוגה עבור החוליות הרפואיות','אבלואציה מבצעית','low','pending','',''],
+    ['כפתור הפרדה בין אר"ן לטבלה','אבלואציה מבצעית','medium','pending','לחכות לפידבקים נוספים',''],
+    ['חץ בטיפול תרופתי שמעיד שיש עוד אופציות לבחירה','אמל"ח','low','pending','',''],
+    ['כותרות באירועים פתוחים - שם לפי יחידה שפתחה','אבלואציה מבצעית','urgent','pending','איפיון קיים','2026-03-19'],
+    ['669 יראו את כל הפצועים בבת אחת בלי לשייך את עצמם לאוגדה','חיל רפואה','medium','pending','',''],
+    ['מצב של מפקד - עבור מפקד רפואה עם אול"ר שלא משויך לצוות רפואי','חיל רפואה','medium','pending','',''],
+    ['סיור מודרך של האפליקציה - הסבר מפורט על ידי לחיצה על כפתור i','אמל"ח','urgent','pending','',''],
+    ["דיווח טמפ' מנות דם דרך האפליקציה",'חיל רפואה','low','pending','',''],
+    ['חיפוש פצוע לפי מספר כרטיס פינוי','אבלואציה מבצעית','medium','pending','',''],
+    ['לעלות את הגבלת מספר המדדים','','urgent','inprogress','',''],
+    ['לחסום אפשרות כתיבת מספר בשם פצוע','','urgent','inprogress','דחיפות מקורית: דחוף מאוד',''],
+    ['התראה שהקפסול נכבה','','medium','pending','בבדיקה של אמל"ח',''],
+    ['בטבלת שליטה שיופיע על הכרטיס מספר כרטיס פינוי','','urgent','inprogress','דחיפות מקורית: דחוף מאוד',''],
+    ['בטופס 101 שהשורה הראשונה לא תזוז וכך תמיד יראו את מספר כרטיס הפינוי ושם הפצוע','','urgent','inprogress','דחיפות מקורית: דחוף מאוד',''],
+    ['הוספת כפתור "הגיע לבית חולים" לכוחות פינוי סופי','','urgent','pending','',''],
+    ['מחיקת מטפלים באפליקציה','669','medium','pending','',''],
+    ['סמלי ושמות החטיבות ב-HEDER','','low','pending','',''],
+    ['מחיקת פצועים באפליקציה שתשפיע על כלל המערכת','עמי','medium','pending','',''],
+    ['הצגת תאריך ושעה באירועים פתוחים','','medium','pending','',''],
+    ['בסיכום נתונים בטבלת שליטה - להוסיף כמה בהלם','','medium','pending','','2026-03-23'],
+    ['פצוע בהלם אוטומטי כפצוע דחוף','','medium','pending','',''],
+    ['אופציה שהאפליקציה תופיע גם לרוחב','','medium','pending','','2026-03-20'],
+    ['בטבלת שליטה - שברירת המחדל תהיה דחוף','','medium','pending','','2026-03-20'],
+    ['פצוע בהלם שיופיע בצבע אחר','','medium','pending','','2026-03-23'],
+    ['מודול הזנת טיפול בדיעבד','','urgent','pending','','2026-03-26'],
+    ['הזנה ידנית של שעת תחילת אירוע','','medium','pending','','2026-03-26'],
+    ['בכניסה לכרטיס פצוע - כפתור שקופץ ושואל "האם את המטפל/ת?"','','medium','pending','אם כן - עריכה; אם לא - צפייה בלבד','2026-04-05'],
+    ['בפתיחת פצוע בטבלת שליטה שברירת המחדל תהיה סימון שלו כ"דחוף"','','medium','pending','','2026-04-05'],
+    ['בכרטיס פינוי באירועים פתוחים - תאריך ושעת אירוע','','medium','pending','','2026-04-05'],
+    ['הזדהות לפי מקצועות - צריך גם בלשון נקבה. פרמדיק/ית, רופא/ה וכן הלאה','','medium','pending','','2026-04-05'],
+    ['אפשרות לבחור מספר טיפולים בו זמנית ואז הוסף על כולם בבת אחת','','medium','pending','','2026-04-05'],
+    ['אפשרות למחוק מטפלים','','medium','pending','','2026-04-05'],
+    ['מדידת חום - שתהיה בחירה בין P.O ל-P.R','קרפ"ר','medium','pending','','2026-04-13'],
+    ['אבחנה של פגיעת אקלים','קרפ"ר','medium','pending','','2026-04-13'],
+    ['יותר מ-10 טיפולים בשורה','','medium','pending','','2026-04-15'],
+    ['אפשרות לסמן שימוש במחמם דם לאחר מתן דם/פלזמה/נוזלים','','medium','pending','','2026-04-15'],
+    ["צ'קבוקס של הזנת אירוע בדיעבד",'','medium','pending','','2026-04-23'],
+    ['סימון של אירוע בטיחות','','medium','pending','','2026-04-26'],
+    ['הוספה של קרפ"ח במסגרת עם הרשאה לצפייה כמו לבנת פינוי חטיבתית','','medium','pending','','2026-07-16']
+  ];
+  const requests = APP_REQ_RAW.map((r,i)=>({ id:i+1, category:'app', title:r[0], requester:r[1], urgency:r[2], status:r[3], notes:r[4], date:r[5]||null }));
+  return {
+    tracks, items, partners, requests, trainings: [],
+    nextTrackId: tracks.length+1, nextItemId: items.length+1, nextPartnerId: partners.length+1,
+    nextRequestId: requests.length+1, nextTrainingId: 1
+  };
 }
 
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2200);
-}
+// ==== Persisted state + transient UI state ====
+let state = { tracks:[], items:[], partners:[], requests:[], trainings:[], nextTrackId:1, nextItemId:1, nextPartnerId:1, nextRequestId:1, nextTrainingId:1 };
+let ui = {
+  view: 'overview', role: 'editor', loading: true,
+  query: '', trackFilter: '', statusFilter: '', typeFilter: '',
+  reqView: 'kanban', urgencyFilter: '', reqQuery: '', trainingsQuery: '',
+  addOpen: false, addKind: null, form: null,
+  confirmOpen: false, confirmMsg: '', confirmFn: null,
+  saveState: 'טוען...'
+};
 
-let confirmResolve = null;
-function customConfirm(message){
-  document.getElementById('confirmMessage').textContent = message;
-  document.getElementById('confirmModalBg').classList.add('show');
-  return new Promise(resolve=>{ confirmResolve = resolve; });
-}
-function confirmYes(){
-  document.getElementById('confirmModalBg').classList.remove('show');
-  if(confirmResolve) confirmResolve(true);
-  confirmResolve = null;
-}
-function confirmNo(){
-  document.getElementById('confirmModalBg').classList.remove('show');
-  if(confirmResolve) confirmResolve(false);
-  confirmResolve = null;
-}
+function trackById(id){ return state.tracks.find(t=>t.id===id); }
+function trackColor(id){ const idx = state.tracks.findIndex(t=>t.id===id); return TRACK_COLORS[(idx<0?0:idx)%8]; }
+function fmt(d){ if(!d) return '—'; const p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0].slice(2); }
+function qIndex(dateStr){ const [y,m]=dateStr.split('-').map(Number); return (y-2026)*4+Math.floor((m-1)/3); }
+function esc(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-const BULK_IMPORT_APP_REQUESTS = [
-  {title:'עדכון אפליקציה לפי סכמת X-CARE', requester:'רפמ"צ', urgency:'low', status:'pending', notes:'גירסא הבאה - מורכבות בהעברת מידע ברשתות'},
-  {title:'משיכת פצועים בין יחידות לא רק לפי עץ ציוות מלמטה למעלה אלא גם שגדוד ימשוך מחטיבה', requester:'אבלואציה מבצעית', urgency:'medium', status:'pending', notes:'הערכת ביצוע: בינוני'},
-  {title:'העברת המידע בטבלת שליטה בברקוד ולא פצוע בודד', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:''},
-  {title:'בסיכום פצוע בודד - במצב בהיר גופן שהוא לא אפור למדדים כי לא רואים', requester:'אבלואציה מבצעית', urgency:'medium', status:'inprogress', notes:'הערכת ביצוע: קל'},
-  {title:'בסיכום פצוע בודד - להוסיף שם פצוע ומספר כרטיס פינוי, ודחיפות פינוי', requester:'אבלואציה מבצעית', urgency:'urgent', status:'inprogress', notes:'הערכת ביצוע: קל'},
-  {title:'להוריד מקרא של מיקומי פציעות - מבלבל ומשתמשים לוחצים על זה במקום על הגוף', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:'הערכת ביצוע: קל; לוודא פידבקים נוספים'},
-  {title:'הוספת מספר כרטיס פינוי ב-7 השאלות בטבלת שליטה ולהוריד כתיבת דחיפות פינוי (נוסף גם ככה בצד)', requester:'אבלואציה מבצעית', urgency:'high', status:'inprogress', notes:'הערכת ביצוע: קל'},
-  {title:'הפיכת כפתור "הוסף" ו"ביטול" בתוך הטופס לאחר טיפול לבולט יותר וצבע שונה', requester:'אבלואציה מבצעית', urgency:'medium', status:'inprogress', notes:'הערכת ביצוע: קל'},
-  {title:'הוספת לחצן "ל"ד לא נמדד" מתחת למדידת ל"ד (כמו ברדיאלי לא נימוש)', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:'הערכת ביצוע: קשה; לשמור לגרסת גשר'},
-  {title:'להוריד טנ"צ לעץ ציוות אוגדתי', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:'שינוי בעץ ציוות - טנ"צ הוא חטיבתי'},
-  {title:'הוספת מקצוע בהתחלה - מנ"א (מנהל אירוע)', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:'מנ"א = מנהל אירוע'},
-  {title:'בטיפול תרופתי להוסיף: "אחר" תחתיו יהיה פרמין, מידזולם', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:'הערכת ביצוע: קשה; לשמור לגרסת גשר'},
-  {title:'פצועים במסך "אירועים פתוחים" שם מספר כרטיס דחיפות', requester:'אבלואציה מבצעית', urgency:'high', status:'inprogress', notes:''},
-  {title:'בסטורציה - תיבת סימון של "לא נמדד"', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:'הערכת ביצוע: קשה'},
-  {title:'במיקומי פציעות - אופציה להזזת המיקום על גבי התמונה בנוסף לאופציה של מחיקה', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:'לוודא פידבקים נוספים'},
-  {title:'בגלילת טופס 101 - שיופיע למעלה שם הפצוע ודחיפות', requester:'אבלואציה מבצעית', urgency:'high', status:'inprogress', notes:'הערכת ביצוע: קל; ירון צריך לוודא במעבר לאתר'},
-  {title:'אופציה לכתוב פרוצדורות מתוכננות ולאחר מכן לסמן שהן בוצעו', requester:'אבלואציה מבצעית', urgency:'high', status:'inprogress', notes:'נתחיל מטקסט חופשי בטבלת שליטה'},
-  {title:'רטט בקבלת פצוע דחוף חדש באול"ר', requester:'חיל רפואה', urgency:'medium', status:'pending', notes:'יש צורך שהאפליקציה תרוץ ברקע יאנוס את הסוללה'},
-  {title:'העברת פצוע בעזרת ברקוד מוחקת את הפצוע מהאול"ר - צריך להפוך אותו לאפור עם אופציה למחיקה כמו בהעברה רגילה', requester:'אבלואציה מבצעית', urgency:'medium', status:'pending', notes:'הערכת ביצוע: קל'},
-  {title:'התראה באפליקציה שאין רשת', requester:'אבלואציה מבצעית', urgency:'urgent', status:'pending', notes:'אין חיווי לגבי ה-VPN'},
-  {title:'השלמת מילים אוטומטית בזמן כתיבה חופשית', requester:'אבלואציה מבצעית', urgency:'urgent', status:'pending', notes:'הגדרות אול"ר - יכנס רק בגרסת אול"ר הבאה'},
-  {title:'בסוף הטופס - אין צורך גם בסיווג פצוע וגם בסיווג פינוי - להוריד סיווג פינוי', requester:'אבלואציה מבצעית', urgency:'medium', status:'pending', notes:''},
-  {title:'הוספת קריטריונים בסיווג פצוע: דחוף, לא דחוף, ממתין, תגובת קרב', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:''},
-  {title:'יצירת ישות של פלוגה עבור החוליות הרפואיות', requester:'אבלואציה מבצעית', urgency:'low', status:'pending', notes:''},
-  {title:'כפתור הפרדה בין אר"ן לטבלה', requester:'אבלואציה מבצעית', urgency:'medium', status:'pending', notes:'לחכות לפידבקים נוספים'},
-  {title:'חץ בטיפול תרופתי שמעיד שיש עוד אופציות לבחירה ברגע שלוחצים על הכפתור', requester:'אמל"ח', urgency:'low', status:'pending', notes:''},
-  {title:'כותרות באירועים פתוחים - שם לפי יחידה שפתחה', requester:'אבלואציה מבצעית', urgency:'urgent', status:'pending', notes:'איפיון קיים'},
-  {title:'669 יראו את כל הפצועים בבת אחת בלי לשייך את עצמם לאוגדה', requester:'חיל רפואה', urgency:'medium', status:'pending', notes:''},
-  {title:'מצב של מפקד - עבור מפקד רפואה עם אול"ר שלא משויך לצוות רפואי (נגיד קרפ"ח, קרפ"א שנמצא בשטח)', requester:'חיל רפואה', urgency:'medium', status:'pending', notes:''},
-  {title:'סיור מודרך של האפליקציה - הסבר מפורט של האפליקציה על ידי לחיצה על כפתור i', requester:'אמל"ח', urgency:'urgent', status:'pending', notes:''},
-  {title:"דיווח טמפ' מנות דם דרך האפליקציה", requester:'חיל רפואה', urgency:'low', status:'pending', notes:''},
-  {title:'חיפוש פצוע לפי מספר כרטיס פינוי', requester:'אבלואציה מבצעית', urgency:'medium', status:'pending', notes:''},
-  {title:'לעלות את הגבלת מספר המדדים', requester:'', urgency:'urgent', status:'inprogress', notes:'ירון יוודא לגבי הגשר'},
-  {title:'לחסום אפשרות כתיבת מספר בשם פצוע', requester:'', urgency:'urgent', status:'inprogress', notes:'דחיפות מקורית: דחוף מאוד'},
-  {title:'התראה שהקפסול נכבה', requester:'', urgency:'medium', status:'pending', notes:'בבדיקה של אמל"ח'},
-  {title:'בטבלת שליטה שיופיע על הכרטיס מספר כרטיס פינוי', requester:'', urgency:'urgent', status:'inprogress', notes:'דחיפות מקורית: דחוף מאוד'},
-  {title:'בטופס 101 שהשורה הראשונה לא תזוז וכך תמיד יראו את מספר כרטיס הפינוי ושם הפצוע', requester:'', urgency:'urgent', status:'inprogress', notes:'דחיפות מקורית: דחוף מאוד'},
-  {title:'הוספת כפתור "הגיע לבית חולים" לכוחות פינוי סופי', requester:'', urgency:'urgent', status:'pending', notes:''},
-  {title:'מחיקת מטפלים באפליקציה', requester:'669', urgency:'medium', status:'pending', notes:''},
-  {title:'סמלי ושמות החטיבות ב-HEDER', requester:'', urgency:'low', status:'pending', notes:''},
-  {title:'מחיקת פצועים באפליקציה שתשפיע על כלל המערכת', requester:'עמי', urgency:'medium', status:'pending', notes:''},
-  {title:'הצגת תאריך ושעה באירועים פתוחים', requester:'', urgency:'medium', status:'pending', notes:''},
-  {title:'בסיכום נתונים בטבלת שליטה - להוסיף כמה בהלם', requester:'', urgency:'medium', status:'pending', notes:''},
-  {title:'פצוע בהלם אוטומטי כפצוע דחוף', requester:'', urgency:'medium', status:'pending', notes:''}
-];
-
-const BULK_IMPORT_APP_REQUESTS_2 = [
-  {date:'2026-03-19', title:'כותרות באירועים פתוחים - שם לפי יחידה שפתחה', requester:'אבלואציה מבצעית', urgency:'urgent'},
-  {date:'2026-03-20', title:'אופציה שהאפליקציה תופיע גם לרוחב', requester:'', urgency:'medium'},
-  {date:'2026-03-20', title:'בטבלת שליטה - שברירת המחדל תהיה דחוף', requester:'', urgency:'medium'},
-  {date:'2026-03-23', title:'בסיכום נתונים בטבלת שליטה - להוסיף כמה בהלם', requester:'', urgency:'medium'},
-  {date:'2026-03-23', title:'פצוע בהלם שיופיע בצבע אחר', requester:'', urgency:'medium'},
-  {date:'2026-03-26', title:'מודול הזנת טיפול בדיעבד', requester:'', urgency:'urgent'},
-  {date:'2026-03-26', title:'הזנה ידנית של שעת תחילת אירוע', requester:'', urgency:'medium'},
-  {date:'2026-04-05', title:'בכניסה לכרטיס פצוע - כפתור שקופץ ושואל "האם את המטפל/ת?". אם כן - יש אפשרות עריכה. אם לא - צפייה בלבד', requester:'', urgency:'medium'},
-  {date:'2026-04-05', title:'בפתיחת פצוע בטבלת שליטה שברירת המחדל תהיה סימון שלו כ"דחוף"', requester:'', urgency:'medium'},
-  {date:'2026-04-05', title:'בכרטיס פינוי באירועים פתוחים - תאריך ושעת אירוע', requester:'', urgency:'medium'},
-  {date:'2026-04-05', title:'הזדהות לפי מקצועות - צריך גם בלשון נקבה. פרמדיק/ית, רופא/ה וכן הלאה', requester:'', urgency:'medium'},
-  {date:'2026-04-05', title:'אפשרות לבחור מספר טיפולים בו זמנית ואז הוסף על כולם בבת אחת', requester:'', urgency:'medium'},
-  {date:'2026-04-05', title:'אפשרות למחוק מטפלים', requester:'', urgency:'medium'},
-  {date:'2026-04-13', title:'מדידת חום - שתהיה בחירה בין P.O ל-P.R', requester:'קרפ"ר', urgency:'medium'},
-  {date:'2026-04-13', title:'אבחנה של פגיעת אקלים', requester:'קרפ"ר', urgency:'medium'},
-  {date:'2026-04-15', title:'יותר מ-10 טיפולים בשורה', requester:'', urgency:'medium'},
-  {date:'2026-04-15', title:'אפשרות לסמן שימוש במחמם דם לאחר מתן דם/פלזמה/נוזלים', requester:'', urgency:'medium'},
-  {date:'2026-04-23', title:"צ'קבוקס של הזנת אירוע בדיעבד", requester:'', urgency:'medium'},
-  {date:'2026-04-26', title:'סימון של אירוע בטיחות', requester:'', urgency:'medium'},
-  {date:'2026-07-16', title:'הוספה של קרפ"ח במסגרת עם הרשאה לצפייה כמו לבנת פינוי חטיבתית', requester:'', urgency:'medium'}
-];
-
+// ==== Persistence (Firebase, with localStorage fallback) ====
 async function loadData(){
-  const el = document.getElementById('saveState');
   try{
     const res = await window.storage.get(STORAGE_KEY);
     if(res && res.value){
-      state = JSON.parse(res.value);
-      if(!state.partners) state.partners = [];
-      if(!state.nextPartnerId) state.nextPartnerId = state.partners.length+1;
-      if(!state.requests) state.requests = [];
-      if(!state.nextRequestId) state.nextRequestId = state.requests.length+1;
-      if(!state.trainings) state.trainings = [];
-      if(!state.nextTrainingId) state.nextTrainingId = state.trainings.length+1;
-      el.textContent = 'הנתונים נטענו';
+      const loaded = JSON.parse(res.value);
+      state = { ...seed(), ...loaded };
+      ui.saveState = 'הנתונים נטענו';
     } else {
       state = seed();
       await window.storage.set(STORAGE_KEY, JSON.stringify(state));
-      el.textContent = 'נוצרו נתוני פתיחה';
+      ui.saveState = 'נוצרו נתוני פתיחה';
     }
   } catch(e){
     console.error(e);
     state = seed();
-    el.textContent = 'עובד במצב זמני (אין חיבור לאחסון) — שינויים לא יישמרו';
+    ui.saveState = 'עובד במצב זמני (אין חיבור לאחסון) — שינויים לא יישמרו';
   }
-  if(!state.bulkImportAppV1){
-    BULK_IMPORT_APP_REQUESTS.forEach(r=>{
-      state.requests.push({ id: state.nextRequestId++, category:'app', title:r.title, date:null, requester:r.requester||'', urgency:r.urgency, status:r.status, notes:r.notes||'' });
-    });
-    state.bulkImportAppV1 = true;
-    await saveData();
-  }
-  if(!state.bulkImportAppV2){
-    BULK_IMPORT_APP_REQUESTS_2.forEach(r=>{
-      const existing = state.requests.find(i=>i.category==='app' && i.title===r.title);
-      if(existing){
-        existing.date = r.date;
-        if(!existing.requester && r.requester) existing.requester = r.requester;
-      } else {
-        state.requests.push({ id: state.nextRequestId++, category:'app', title:r.title, date:r.date, requester:r.requester||'', urgency:r.urgency, status:'pending', notes:'' });
-      }
-    });
-    state.bulkImportAppV2 = true;
-    await saveData();
-  }
-  renderAll();
+  ui.loading = false;
+  render();
 }
-
 async function saveData(){
-  const el = document.getElementById('saveState');
   try{
-    const res = await window.storage.set(STORAGE_KEY, JSON.stringify(state));
-    if(!res) throw new Error('no result');
-    el.textContent = 'נשמר';
+    await window.storage.set(STORAGE_KEY, JSON.stringify(state));
+    ui.saveState = 'נשמר';
   } catch(e){
     console.error(e);
-    el.textContent = 'שמירה נכשלה';
-    showToast('שמירה נכשלה — בדקי חיבור');
+    ui.saveState = 'שמירה נכשלה';
+  }
+  render();
+}
+
+// ==== Focus-preserving re-render ====
+function render(){
+  const active = document.activeElement;
+  const activeId = active && active.id;
+  const selStart = active && 'selectionStart' in active ? active.selectionStart : null;
+  const selEnd = active && 'selectionEnd' in active ? active.selectionEnd : null;
+  document.getElementById('app').innerHTML = renderApp();
+  if(activeId){
+    const el = document.getElementById(activeId);
+    if(el){
+      el.focus();
+      if(selStart!=null && el.setSelectionRange){ try{ el.setSelectionRange(selStart, selEnd); }catch(e){} }
+    }
   }
 }
 
-function trackById(id){ return state.tracks.find(t=>t.id===id); }
+// ==== Navigation & role ====
+function go(view){ ui.view=view; render(); }
+function goTrack(trackId){ ui.view='items'; ui.trackFilter=String(trackId); ui.query=''; ui.statusFilter=''; ui.typeFilter=''; render(); }
+function setRole(role){ ui.role=role; if(role==='viewer'){ ui.addOpen=false; } render(); }
+function onSearch(v){ ui.query=v; ui.view='items'; render(); }
+function onItemsSearch(v){ ui.query=v; render(); }
+function onTrackFilter(v){ ui.trackFilter=v; render(); }
+function onStatusFilter(v){ ui.statusFilter=v; render(); }
+function onTypeFilter(v){ ui.typeFilter=v; render(); }
+function clearFilters(){ ui.query=''; ui.trackFilter=''; ui.statusFilter=''; ui.typeFilter=''; render(); }
+function setReqView(v){ ui.reqView=v; render(); }
+function onUrgencyFilter(v){ ui.urgencyFilter=v; render(); }
+function onReqSearch(v){ ui.reqQuery=v; render(); }
+function onTrainingsSearch(v){ ui.trainingsQuery=v; render(); }
 
-function statusLabel(s){ return s==='done'?'הושלם':s==='ongoing'?'בתהליך':'מתוכנן'; }
-
-// ---------- Tabs ----------
-function switchTab(tab){
-  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-'+tab).classList.add('active');
-}
-document.querySelectorAll('nav button').forEach(btn=>{
-  btn.addEventListener('click', ()=> switchTab(btn.dataset.tab));
-});
-
-function goToTrackItems(trackId){
-  switchTab('items');
-  document.getElementById('itemsFilterTrack').value = trackId;
-  clearItemFiltersExceptTrack();
-  renderItems();
-}
-function clearItemFiltersExceptTrack(){
-  document.getElementById('itemsFilterName').value = '';
-  document.getElementById('itemsFilterType').value = '';
-  document.getElementById('itemsFilterOwner').value = '';
-  document.getElementById('itemsFilterStatus').value = '';
-  document.getElementById('itemsFilterStart').value = '';
-  document.getElementById('itemsFilterEnd').value = '';
-}
-
-// ---------- Render ----------
-function renderAll(){
-  renderTrackSelects();
-  renderDashboard();
-  renderGantt();
-  renderPartners();
-  renderItems();
-  renderTracks();
-  renderRequests();
-  renderTrainings();
-}
-
-function renderTrackSelects(){
-  const opts = state.tracks.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
-  document.getElementById('f-track').innerHTML = opts;
-  document.getElementById('e-track').innerHTML = opts;
-  const filter = document.getElementById('itemsFilterTrack');
-  filter.innerHTML = '<option value="">הכל</option>' + opts;
-  document.getElementById('p-tracks').innerHTML = opts;
-  document.getElementById('pe-tracks').innerHTML = opts;
-}
-
-function renderDashboard(){
-  const grid = document.getElementById('dashboardGrid');
-  grid.innerHTML = '';
-  state.tracks.forEach(track=>{
-    const items = state.items.filter(i=>i.track===track.id);
-    const done = items.filter(i=>i.status==='done').length;
-    const ongoing = items.filter(i=>i.status==='ongoing').length;
-    const planned = items.filter(i=>i.status==='planned').length;
-    const owners = [...new Set(items.flatMap(i=>(i.owner||'').split(',').map(s=>s.trim()).filter(Boolean)))];
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.innerHTML = `
-      <span class="tag" style="background:var(--${track.color}bg);color:var(--${track.color});cursor:pointer;" onclick="goToTrackItems(${track.id})" title="לצפייה בכל משימות הטראק">${track.name}</span>
-      <div class="track-meta" style="margin-top:8px;">${owners.length? owners.slice(0,3).join(', ') : 'אין שותפים מוגדרים'}</div>
-      <div class="counts">
-        <span><span class="status-dot status-done"></span>${done} הושלמו</span>
-        <span><span class="status-dot status-ongoing"></span>${ongoing} בתהליך</span>
-        <span><span class="status-dot status-planned"></span>${planned} מתוכננים</span>
-      </div>
-      ${items.length===0 ? '<div class="empty" style="padding:8px 0 0;">אין פריטים עדיין</div>' : ''}
-    `;
-    grid.appendChild(div);
-  });
-}
-
-// ---------- Gantt (auto-derived from milestone items with dates) ----------
-function monthKey(d){ return d.getFullYear()*12 + d.getMonth(); }
-function renderGantt(){
-  const startYear = 2026, endYear = 2028;
-  const months = [];
-  for(let y=startYear;y<=endYear;y++){ for(let m=0;m<12;m++){ months.push({y,m}); } }
-  const startKey = startYear*12;
-
-  const milestones = state.items.filter(i=>i.type==='milestone' && i.start);
-  const byTrack = {};
-  milestones.forEach(i=>{ (byTrack[i.track] ||= []).push(i); });
-
-  const table = document.getElementById('ganttTable');
-  let html = '<thead><tr><th class="tracklabel">טראק / אבן דרך</th>';
-  months.forEach(mo=>{ html += `<th>${String(mo.m+1).padStart(2,'0')}/${String(mo.y).slice(2)}</th>`; });
-  html += '</tr></thead><tbody>';
-
-  const trackIds = Object.keys(byTrack);
-  if(trackIds.length===0){
-    html += `<tr><td class="rowlabel" colspan="${months.length+1}" style="text-align:center;padding:20px;color:var(--text-3);">אין עדיין אבני דרך עם תאריכים. הוסיפי תאריכים בטאב "ניהול משימות".</td></tr>`;
+// ==== Modal (add/edit) ====
+function openAdd(kind, existing){
+  ui.addKind = kind;
+  ui.addOpen = true;
+  if(kind==='item'){
+    ui.form = existing ? {...existing, start: existing.start||'', end: existing.end||''} : {track: state.tracks[0]?.id||1, type:'task', name:'', owner:'', status:'planned', start:'', end:'', notes:''};
+  } else if(kind==='partner'){
+    ui.form = existing ? {...existing, tracksStr:(existing.tracks||[]).join(',')} : {name:'', role:'', tracksStr:'', notes:''};
+  } else if(kind==='training'){
+    ui.form = existing ? {...existing} : {unit:'', date:'', instructor:'', notes:''};
+  } else if(kind==='request'){
+    ui.form = existing ? {...existing, date: existing.date||''} : {category: ui.view==='reqDash'?'dash':'app', title:'', requester:'', urgency:'medium', status:'pending', notes:'', date:''};
   }
-  trackIds.forEach(tid=>{
-    const track = trackById(Number(tid));
-    byTrack[tid].forEach(item=>{
-      html += `<tr><td class="rowlabel"><b>${track.name}</b><br>${item.name}</td>`;
-      const s = monthKey(new Date(item.start));
-      const e = item.end ? monthKey(new Date(item.end)) : s;
-      months.forEach((mo,idx)=>{
-        const k = startKey + idx;
-        const active = k>=s && k<=e;
-        const color = item.status==='done' ? 'var(--green)' : item.status==='ongoing' ? 'var(--blue)' : 'var(--gray)';
-        html += `<td>${active ? `<div class="bar" style="background:${color}"></div>` : ''}</td>`;
-      });
-      html += '</tr>';
-    });
-  });
-  html += '</tbody>';
-  table.innerHTML = html;
-
-  const unscheduled = state.items.filter(i=>i.type==='milestone' && !i.start);
-  const ul = document.getElementById('unscheduledList');
-  ul.innerHTML = unscheduled.length===0 ? '<div class="empty">אין אבני דרך ללא תאריך</div>' :
-    unscheduled.map(i=>`<span class="chip">${trackById(i.track)?.name || ''} — ${i.name}</span>`).join('');
+  render();
 }
+function closeAdd(){ ui.addOpen=false; ui.form=null; render(); }
+function setForm(k,v){ ui.form[k]=v; render(); }
 
-// ---------- Partners (fully editable, with an auto-computed linked-items count) ----------
-function renderPartners(){
-  const tbody = document.getElementById('partnersBody');
-  if(state.partners.length===0){
-    tbody.innerHTML = '<tr><td colspan="5" class="empty">אין עדיין שותפים — הוסיפי למעלה</td></tr>';
-    return;
+function submitAdd(){
+  const f = ui.form;
+  if(ui.addKind==='item'){
+    if(!f.name || !f.name.trim()){ closeAdd(); return; }
+    const rec = { ...f, track:Number(f.track), start:f.start||null, end:f.end||null, notes:f.notes||'' };
+    if(f.id){ state.items = state.items.map(i=>i.id===f.id?{...i,...rec}:i); }
+    else { rec.id = state.nextItemId++; state.items.push(rec); }
+    ui.view='items';
+  } else if(ui.addKind==='partner'){
+    if(!f.name || !f.name.trim()){ closeAdd(); return; }
+    const tracks = (f.tracksStr||'').split(',').map(s=>Number(s.trim())).filter(Boolean);
+    const rec = { name:f.name, role:f.role||'', tracks, notes:f.notes||'' };
+    if(f.id){ state.partners = state.partners.map(p=>p.id===f.id?{...p,...rec}:p); }
+    else { rec.id = state.nextPartnerId++; state.partners.push(rec); }
+    ui.view='partners';
+  } else if(ui.addKind==='training'){
+    if(!f.unit || !f.unit.trim()){ closeAdd(); return; }
+    const rec = { unit:f.unit, date:f.date||null, instructor:f.instructor||'', notes:f.notes||'' };
+    if(f.id){ state.trainings = state.trainings.map(t=>t.id===f.id?{...t,...rec}:t); }
+    else { rec.id = state.nextTrainingId++; state.trainings.push(rec); }
+    ui.view='trainings';
+  } else if(ui.addKind==='request'){
+    if(!f.title || !f.title.trim()){ closeAdd(); return; }
+    const rec = { category:f.category, title:f.title, requester:f.requester||'', urgency:f.urgency, status:f.status, notes:f.notes||'', date:f.date||null };
+    if(f.id){ state.requests = state.requests.map(r=>r.id===f.id?{...r,...rec}:r); }
+    else { rec.id = state.nextRequestId++; state.requests.push(rec); }
+    ui.view = f.category==='dash' ? 'reqDash' : 'reqApp';
   }
-  tbody.innerHTML = state.partners.map(p=>{
-    const trackNames = (p.tracks||[]).map(tid=>trackById(tid)?.name).filter(Boolean).join(', ') || '—';
-    const linked = state.items.filter(i=>(i.owner||'').includes(p.name)).length;
-    return `<tr>
-      <td><b>${p.name}</b>${p.notes ? `<div class="track-meta">${p.notes}</div>` : ''}</td>
-      <td>${p.role || '—'}</td>
-      <td>${trackNames}</td>
-      <td>${linked}</td>
-      <td><button class="btn-icon" onclick="openEditPartner(${p.id})">עריכה</button><button class="btn-icon" onclick="deletePartner(${p.id})">מחיקה</button></td>
-    </tr>`;
-  }).join('');
+  ui.addOpen=false; ui.form=null;
+  saveData();
 }
 
-function getSelectedTracks(selectId){
-  return Array.from(document.getElementById(selectId).selectedOptions).map(o=>Number(o.value));
+function askConfirm(msg, fn){ ui.confirmOpen=true; ui.confirmMsg=msg; ui.confirmFn=fn; render(); }
+function confirmYes(){ const fn=ui.confirmFn; ui.confirmOpen=false; ui.confirmFn=null; if(fn) fn(); }
+function confirmNo(){ ui.confirmOpen=false; ui.confirmFn=null; render(); }
+
+function deleteItemRec(){ const f=ui.form; askConfirm('למחוק את הפריט?', ()=>{ state.items=state.items.filter(i=>i.id!==f.id); ui.addOpen=false; ui.form=null; saveData(); }); }
+function deletePartnerRec(){ const f=ui.form; askConfirm('למחוק את השותף?', ()=>{ state.partners=state.partners.filter(p=>p.id!==f.id); ui.addOpen=false; ui.form=null; saveData(); }); }
+function deleteTrainingRec(){ const f=ui.form; askConfirm('למחוק את תיעוד ההדרכה?', ()=>{ state.trainings=state.trainings.filter(t=>t.id!==f.id); ui.addOpen=false; ui.form=null; saveData(); }); }
+function deleteRequestRec(){ const f=ui.form; askConfirm('למחוק את בקשת השיפור?', ()=>{ state.requests=state.requests.filter(r=>r.id!==f.id); ui.addOpen=false; ui.form=null; saveData(); }); }
+function deleteTrack(id){
+  const n = state.items.filter(i=>i.track===id).length;
+  if(n>0 || ui.role!=='editor') return;
+  askConfirm('למחוק את הטראק?', ()=>{ state.tracks=state.tracks.filter(t=>t.id!==id); saveData(); });
+}
+function addTrackPrompt(){
+  const name = (document.getElementById('newTrackName')||{}).value;
+  if(!name || !name.trim()) return;
+  state.tracks.push({ id: state.nextTrackId++, name: name.trim() });
+  saveData();
 }
 
-function addPartner(){
-  const name = document.getElementById('p-name').value.trim();
-  if(!name){ showToast('נא להזין שם שותף'); return; }
-  const partner = {
-    id: state.nextPartnerId++,
-    name,
-    role: document.getElementById('p-role').value.trim(),
-    tracks: getSelectedTracks('p-tracks'),
-    notes: document.getElementById('p-notes').value.trim()
+// ==== Style helpers ====
+function badgeStyle(c){ return `align-self:flex-start;display:inline-block;max-width:100%;background:${c.bg};color:${c.fg};border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;text-align:start;line-height:1.35;`; }
+function smallBadge(c){ return `display:inline-block;background:${c.bg};color:${c.fg};border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600;line-height:1.35;max-width:158px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;`; }
+function navStyle(active, muted){ return `display:flex;align-items:center;gap:10px;width:100%;height:34px;padding:0 10px;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:${active?600:400};background:${active?'var(--blue-50)':'transparent'};color:${active?'var(--blue-700)':(muted?'var(--muted-foreground)':'var(--foreground)')};box-shadow:${active?'inset -2px 0 0 0 var(--blue-500)':'none'};`; }
+function tabStyle(active){ return `flex:1;height:28px;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:${active?600:400};background:${active?'var(--card)':'transparent'};color:${active?'var(--foreground)':'var(--muted-foreground)'};box-shadow:${active?'var(--shadow-sm)':'none'};`; }
+function kpiCardStyle(soft){ return `background:${soft};border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow-sm);`; }
+
+// ==== Screen renderers ====
+function renderSidebar(){
+  const counts = {
+    overview: state.tracks.length,
+    gantt: state.items.filter(i=>i.type==='milestone').length,
+    items: state.items.length,
+    partners: state.partners.length,
+    tracks: state.tracks.length,
+    reqApp: state.requests.filter(r=>r.category==='app').length,
+    reqDash: state.requests.filter(r=>r.category==='dash').length,
+    trainings: state.trainings.length
   };
-  state.partners.push(partner);
-  ['p-name','p-role','p-notes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('p-tracks').selectedIndex = -1;
-  saveData();
-  renderAll();
-  showToast('השותף נוסף');
+  const navItem = (n, muted) => `
+    <button type="button" onclick="go('${n.id}')" style="${navStyle(ui.view===n.id, muted)}">
+      <span style="width:6px;height:6px;border-radius:9999px;background:currentColor;opacity:${muted?.35:.55};flex-shrink:0"></span>
+      <span style="flex:1;text-align:start">${esc(n.label)}</span>
+      <span style="font-size:11px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${counts[n.id]}</span>
+    </button>`;
+  const roleHint = ui.role==='editor' ? 'הרשאת עריכה מלאה: הוספה, עריכה ומחיקה.' : 'צפייה בלבד: פעולות העריכה מוסתרות.';
+  return `
+  <aside style="width:248px;flex-shrink:0;background:var(--sidebar);border-inline-end:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh">
+    <div style="display:flex;flex-direction:column;gap:10px;padding:14px 16px 16px;border-bottom:1px solid var(--border);background:var(--blue-50)">
+      <div style="width:100%;height:76px;border-radius:10px;border:1px dashed var(--border-strong,var(--border));display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted-foreground);text-align:center;background:var(--background)">סמל חיל הרפואה<br>(להחליף בקובץ הרשמי)</div>
+      <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0">
+        <strong style="font-size:14px;font-weight:600">שו״ב פצועים</strong>
+        <span style="font-size:12px;color:var(--muted-foreground)">Roadmap · ענף רפואה מבצעית</span>
+      </span>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:16px;padding:14px 10px;overflow-y:auto;flex:1">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <span style="font-size:11px;font-weight:600;color:var(--muted-foreground);padding:4px 8px;letter-spacing:.02em">מעקב פרויקט</span>
+        ${NAV_MAIN.map(n=>navItem(n,false)).join('')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <span style="font-size:11px;font-weight:600;color:var(--muted-foreground);padding:4px 8px">ניהול ותוכן</span>
+        ${NAV_REST.map(n=>navItem(n,true)).join('')}
+      </div>
+    </nav>
+    <div style="border-top:1px solid var(--border);padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:var(--muted-foreground)">מצב עבודה</span>
+      <div style="display:flex;gap:4px;background:var(--muted);border-radius:8px;padding:3px">
+        <button type="button" onclick="setRole('editor')" style="${tabStyle(ui.role==='editor')}">עורך</button>
+        <button type="button" onclick="setRole('viewer')" style="${tabStyle(ui.role==='viewer')}">צופה</button>
+      </div>
+      <span style="font-size:11px;color:var(--muted-foreground);line-height:1.4">${roleHint}</span>
+      <span style="font-size:10px;color:var(--muted-foreground)">${esc(ui.saveState)}</span>
+    </div>
+  </aside>`;
 }
 
-function openEditPartner(id){
-  const p = state.partners.find(x=>x.id===id);
-  if(!p) return;
-  editingPartnerId = id;
-  document.getElementById('pe-name').value = p.name;
-  document.getElementById('pe-role').value = p.role || '';
-  document.getElementById('pe-notes').value = p.notes || '';
-  const sel = document.getElementById('pe-tracks');
-  Array.from(sel.options).forEach(o=> o.selected = (p.tracks||[]).includes(Number(o.value)));
-  document.getElementById('editPartnerModalBg').classList.add('show');
-}
-function closePartnerEdit(){ document.getElementById('editPartnerModalBg').classList.remove('show'); editingPartnerId=null; }
-function savePartnerEdit(){
-  const p = state.partners.find(x=>x.id===editingPartnerId);
-  if(!p) return;
-  p.name = document.getElementById('pe-name').value.trim();
-  p.role = document.getElementById('pe-role').value.trim();
-  p.notes = document.getElementById('pe-notes').value.trim();
-  p.tracks = getSelectedTracks('pe-tracks');
-  saveData();
-  renderAll();
-  closePartnerEdit();
-  showToast('העריכה נשמרה');
-}
-async function deletePartner(id){
-  if(!(await customConfirm('למחוק את השותף?'))) return;
-  state.partners = state.partners.filter(p=>p.id!==id);
-  saveData();
-  renderAll();
+function renderHeader(){
+  const canEdit = ui.role==='editor';
+  return `
+  <header style="display:flex;align-items:center;gap:12px;height:56px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--card);position:sticky;top:0;z-index:5">
+    <strong style="font-size:14px;font-weight:600;white-space:nowrap">${TITLES[ui.view]}</strong>
+    <span style="width:1px;height:16px;background:var(--border)"></span>
+    <span style="font-size:12px;color:var(--muted-foreground);white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis">${SUBTITLES[ui.view]}</span>
+    <span style="flex:1"></span>
+    <label style="display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);width:260px;flex-shrink:0;min-width:220px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted-foreground);flex-shrink:0"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <input id="globalSearch" type="search" placeholder="חיפוש בפריטים, שותפים, טראקים" value="${esc(ui.query)}" oninput="onSearch(this.value)" style="border:none;outline:none;background:transparent;font-size:13px;color:var(--foreground);width:100%" />
+    </label>
+    ${canEdit ? `<button type="button" onclick="openAdd('item')" style="display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-foreground);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg> פריט חדש</button>` : ''}
+  </header>`;
 }
 
-// ---------- Items management ----------
+function renderOverview(){
+  const items = state.items;
+  const ongoingCount = items.filter(i=>i.status==='ongoing').length;
+  const milestones = items.filter(i=>i.type==='milestone');
+  const tbd = milestones.filter(i=>!i.start);
+  const appReqs = state.requests.filter(r=>r.category==='app');
+  const kpis = [
+    { label:'פריטים במעקב', value: items.length, hint: `${state.tracks.length} טראקים פעילים`, soft:'var(--indigo-50)', ink:'var(--indigo-700)', dot:'var(--indigo-500)' },
+    { label:'בתהליך עכשיו', value: ongoingCount, hint: `מתוך ${items.length} פריטים`, soft:'var(--blue-50)', ink:'var(--blue-700)', dot:'var(--blue-500)' },
+    { label:'אבני דרך ללא תאריך', value: tbd.length, hint: `מתוך ${milestones.length} אבני דרך`, soft:'var(--amber-50)', ink:'var(--amber-700)', dot:'var(--amber-500)' },
+    { label:'בקשות שיפור מהשטח', value: appReqs.length, hint: `אפליקציה · ${state.partners.length} שותפים בפרויקט`, soft:'var(--cyan-50)', ink:'var(--cyan-700)', dot:'var(--cyan-600)' }
+  ];
+  const kpiHtml = kpis.map(k=>`
+    <div style="${kpiCardStyle(k.soft)}">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="width:8px;height:8px;border-radius:9999px;background:${k.dot};flex-shrink:0"></span>
+        <span style="font-size:12px;color:var(--muted-foreground)">${esc(k.label)}</span>
+      </div>
+      <strong style="font-size:30px;font-weight:600;line-height:1.1;color:${k.ink};font-variant-numeric:tabular-nums">${k.value}</strong>
+      <span style="font-size:12px;color:var(--muted-foreground)">${esc(k.hint)}</span>
+    </div>`).join('');
+
+  const cardsHtml = ui.loading ? Array.from({length:8}).map(()=>`
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px;animation:shimmer 1.4s ease-in-out infinite">
+        <span style="height:20px;width:60%;border-radius:6px;background:var(--muted)"></span>
+        <span style="height:12px;width:85%;border-radius:6px;background:var(--muted)"></span>
+        <span style="height:8px;width:100%;border-radius:9999px;background:var(--muted)"></span>
+      </div>`).join('')
+    : state.tracks.map((t,i)=>{
+      const own = items.filter(it=>it.track===t.id);
+      const done = own.filter(i=>i.status==='done').length;
+      const ongoing = own.filter(i=>i.status==='ongoing').length;
+      const planned = own.filter(i=>i.status==='planned').length;
+      const owners = [...new Set(own.flatMap(i=>(i.owner||'').split(',').map(x=>x.trim()).filter(Boolean)))];
+      const c = TRACK_COLORS[i%8];
+      const total = own.length || 1;
+      return `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow-sm)">
+        <button type="button" onclick="goTrack(${t.id})" style="${badgeStyle(c)}">${esc(t.name)}</button>
+        <span style="font-size:12px;color:var(--muted-foreground);line-height:1.45;min-height:34px">${esc(owners.length?owners.slice(0,3).join(' · '):'אין שותפים מוגדרים')}</span>
+        <div style="display:flex;height:6px;border-radius:9999px;overflow:hidden;background:var(--muted)">
+          <span style="width:${done/total*100}%;background:${STATUS.done.solid}"></span>
+          <span style="width:${ongoing/total*100}%;background:${STATUS.ongoing.solid}"></span>
+        </div>
+        <div style="display:flex;gap:12px;font-size:12px;color:var(--muted-foreground);flex-wrap:wrap">
+          <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:9999px;background:var(--emerald-500)"></span>${done} הושלמו</span>
+          <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:9999px;background:var(--blue-500)"></span>${ongoing} בתהליך</span>
+          <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:9999px;background:var(--gray-400)"></span>${planned} מתוכננים</span>
+        </div>
+      </div>`;
+    }).join('');
+
+  return `
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">${kpiHtml}</div>
+    <div style="display:flex;align-items:baseline;gap:10px">
+      <h2 style="margin:0;font-size:16px;font-weight:600">טראקים</h2>
+      <span style="font-size:12px;color:var(--muted-foreground)">לחיצה על טראק פותחת את ניהול המשימות מסונן אליו</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">${cardsHtml}</div>
+  </div>`;
+}
+
+function renderGantt(){
+  const milestones = state.items.filter(i=>i.type==='milestone');
+  const scheduled = milestones.filter(i=>i.start);
+  const tbd = milestones.filter(i=>!i.start);
+  const quarters = [];
+  for(let y=2026;y<=2028;y++) for(let q=1;q<=4;q++) quarters.push({q:'Q'+q,y:String(y)});
+  const rowsHtml = scheduled.map(i=>{
+    const from = qIndex(i.start), to = i.end?qIndex(i.end):from;
+    const st = STATUS[i.status];
+    return `
+    <div style="height:52px;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:2px;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px;font-weight:500">${esc(i.name)}</span>
+      <span style="font-size:11px;color:var(--muted-foreground)">${esc(trackById(i.track).name)} · <span style="font-variant-numeric:tabular-nums">${fmt(i.start)} – ${fmt(i.end)}</span></span>
+    </div>`;
+  }).join('');
+  const barsHtml = scheduled.map(i=>{
+    const from = qIndex(i.start), to = i.end?qIndex(i.end):from;
+    const st = STATUS[i.status];
+    const cells = quarters.map(()=>`<span style="height:52px;border-inline-end:1px solid var(--border)"></span>`).join('');
+    return `
+    <div style="height:52px;position:relative;border-bottom:1px solid var(--border);display:grid;grid-template-columns:repeat(12,1fr);align-items:center">
+      ${cells}
+      <span style="grid-column:${from+1} / ${to+2};grid-row:1;height:22px;border-radius:6px;background:${st.solid};margin:0 4px;position:relative;z-index:2;overflow:hidden"></span>
+    </div>`;
+  }).join('');
+  const quartersHtml = quarters.map(q=>`
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;border-inline-end:1px solid var(--border);font-size:11px;color:var(--muted-foreground);gap:1px">
+      <span style="font-weight:600;color:var(--foreground)">${q.q}</span><span>${q.y}</span>
+    </div>`).join('');
+  const tbdHtml = tbd.map(i=>`
+    <span style="display:inline-flex;align-items:center;gap:8px;border:1px dashed var(--border);border-radius:9999px;padding:6px 12px;font-size:12px;background:var(--background)">
+      <span style="width:7px;height:7px;border-radius:9999px;background:${STATUS[i.status].solid};flex-shrink:0"></span>
+      <span style="font-weight:500">${esc(i.name)}</span><span style="color:var(--muted-foreground)">${esc(trackById(i.track).name)}</span>
+    </span>`).join('');
+  return `
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-sm)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <strong style="font-size:14px;font-weight:600">ציר זמן אבני דרך · 2026–2028</strong>
+          <span style="font-size:12px;color:var(--muted-foreground)">רבעונים; פס לכל אבן דרך שהוגדרו לה תאריכים</span>
+        </div>
+        <div style="display:flex;gap:14px;font-size:12px;color:var(--muted-foreground)">
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--emerald-500)"></span>הושלם</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--blue-500)"></span>בתהליך</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--gray-400)"></span>מתוכנן</span>
+        </div>
+      </div>
+      ${scheduled.length===0 ? `<div style="padding:32px 18px;text-align:center;color:var(--muted-foreground);font-size:13px">אין עדיין אבני דרך עם תאריכים.</div>` : `
+      <div style="overflow-x:auto">
+        <div style="min-width:900px;display:grid;grid-template-columns:260px 1fr">
+          <div style="border-inline-end:1px solid var(--border);background:var(--card)">
+            <div style="height:44px;display:flex;align-items:center;padding:0 16px;font-size:12px;font-weight:600;color:var(--muted-foreground);border-bottom:1px solid var(--border)">טראק / אבן דרך</div>
+            ${rowsHtml}
+          </div>
+          <div>
+            <div style="height:44px;display:grid;grid-template-columns:repeat(12,1fr);border-bottom:1px solid var(--border)">${quartersHtml}</div>
+            ${barsHtml}
+          </div>
+        </div>
+      </div>`}
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow-sm)">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <strong style="font-size:14px;font-weight:600">אבני דרך ללא תאריך</strong>
+        <span style="font-size:12px;color:var(--muted-foreground)">${tbd.length} מתוך ${milestones.length} אבני הדרך טרם תוארכו — הן נשמרות כאן כדי שלא יאבדו מהמעקב</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">${tbdHtml || '<span style="font-size:13px;color:var(--muted-foreground)">אין אבני דרך ללא תאריך</span>'}</div>
+    </div>
+  </div>`;
+}
+
 function renderItems(){
-  const fTrack = document.getElementById('itemsFilterTrack').value;
-  const fName = document.getElementById('itemsFilterName').value.trim().toLowerCase();
-  const fType = document.getElementById('itemsFilterType').value;
-  const fOwner = document.getElementById('itemsFilterOwner').value.trim().toLowerCase();
-  const fStatus = document.getElementById('itemsFilterStatus').value;
-  const fStart = document.getElementById('itemsFilterStart').value.trim().toLowerCase();
-  const fEnd = document.getElementById('itemsFilterEnd').value.trim().toLowerCase();
-
-  const tbody = document.getElementById('itemsBody');
-  const items = state.items.filter(i=>{
-    if(fTrack && i.track!==Number(fTrack)) return false;
-    if(fName && !i.name.toLowerCase().includes(fName)) return false;
-    if(fType && i.type!==fType) return false;
-    if(fOwner && !(i.owner||'').toLowerCase().includes(fOwner)) return false;
-    if(fStatus && i.status!==fStatus) return false;
-    if(fStart && !((i.start||'tbd').toLowerCase().includes(fStart))) return false;
-    if(fEnd && !((i.end||'tbd').toLowerCase().includes(fEnd))) return false;
+  const canEdit = ui.role==='editor';
+  const filtered = state.items.filter(i=>{
+    if(ui.trackFilter && String(i.track)!==ui.trackFilter) return false;
+    if(ui.statusFilter && i.status!==ui.statusFilter) return false;
+    if(ui.typeFilter && i.type!==ui.typeFilter) return false;
+    if(ui.query){ const q=ui.query.trim().toLowerCase(); const tn=trackById(i.track).name.toLowerCase();
+      if(!(i.name.toLowerCase().includes(q) || (i.owner||'').toLowerCase().includes(q) || tn.includes(q))) return false; }
     return true;
   });
-  tbody.innerHTML = items.length===0 ? `<tr><td colspan="8" class="empty">אין פריטים תואמים לסינון</td></tr>` : items.map(item=>{
-    const track = trackById(item.track);
-    return `<tr>
-      <td><span class="tag" style="background:var(--${track?.color}bg);color:var(--${track?.color})">${track?.name || '—'}</span></td>
-      <td>${item.name}</td>
-      <td>${item.type==='milestone'?'אבן דרך':'משימה'}</td>
-      <td>${item.owner || '—'}</td>
-      <td><span class="status-dot status-${item.status}"></span><span class="status-label">${statusLabel(item.status)}</span></td>
-      <td>${item.start || 'TBD'}</td>
-      <td>${item.end || (item.type==='milestone' ? 'TBD' : '—')}</td>
-      <td><button class="btn-icon" onclick="openEdit(${item.id})">עריכה</button><button class="btn-icon" onclick="deleteItem(${item.id})">מחיקה</button></td>
-    </tr>`;
+  const trackOpts = state.tracks.map(t=>`<option value="${t.id}" ${ui.trackFilter===String(t.id)?'selected':''}>${esc(t.name)}</option>`).join('');
+  const rowsHtml = filtered.map(it=>{
+    const c = trackColor(it.track); const st = STATUS[it.status];
+    return `
+    <div style="display:grid;grid-template-columns:170px minmax(220px,1fr) 96px 190px 110px 96px 96px 84px;gap:0;padding:10px 16px;align-items:center;border-top:1px solid var(--border);font-size:13px">
+      <span><span style="${smallBadge(c)}">${esc(trackById(it.track).name)}</span></span>
+      <span style="display:flex;flex-direction:column;gap:2px;padding-inline-end:12px">
+        <span style="font-weight:500">${esc(it.name)}</span>
+        <span style="font-size:11px;color:var(--muted-foreground)">${esc(it.notes||'')}</span>
+      </span>
+      <span style="font-size:12px;color:var(--muted-foreground)">${it.type==='milestone'?'אבן דרך':'משימה'}</span>
+      <span style="font-size:12px;color:var(--muted-foreground);padding-inline-end:10px">${esc(it.owner||'—')}</span>
+      <span><span style="${smallBadge(st)}">${st.label}</span></span>
+      <span style="font-size:12px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${fmt(it.start)}</span>
+      <span style="font-size:12px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${it.end?fmt(it.end):(it.type==='milestone'?'—':'—')}</span>
+      <span style="display:flex;justify-content:flex-end">
+        ${canEdit?`<button type="button" onclick='openAdd("item", ${JSON.stringify(it).replace(/'/g,"&#39;")})' style="height:28px;padding:0 10px;border:1px solid var(--input);border-radius:8px;background:var(--background);color:var(--foreground);font-size:12px;cursor:pointer">עריכה</button>`:''}
+      </span>
+    </div>`;
   }).join('');
+  return `
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <input id="itemsSearch" type="search" placeholder="חיפוש לפי שם פריט" value="${esc(ui.query)}" oninput="onItemsSearch(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;width:240px;outline:none" />
+      <select onchange="onTrackFilter(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;outline:none"><option value="">כל הטראקים</option>${trackOpts}</select>
+      <select onchange="onStatusFilter(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;outline:none">
+        <option value="">כל הסטטוסים</option><option value="done" ${ui.statusFilter==='done'?'selected':''}>הושלם</option><option value="ongoing" ${ui.statusFilter==='ongoing'?'selected':''}>בתהליך</option><option value="planned" ${ui.statusFilter==='planned'?'selected':''}>מתוכנן</option>
+      </select>
+      <select onchange="onTypeFilter(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;outline:none">
+        <option value="">משימות ואבני דרך</option><option value="task" ${ui.typeFilter==='task'?'selected':''}>משימות</option><option value="milestone" ${ui.typeFilter==='milestone'?'selected':''}>אבני דרך</option>
+      </select>
+      <button type="button" onclick="clearFilters()" style="height:36px;padding:0 14px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;cursor:pointer">ניקוי סינון</button>
+      <span style="flex:1"></span>
+      <span style="font-size:12px;color:var(--muted-foreground)">${filtered.length} מתוך ${state.items.length} פריטים</span>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow-x:auto;box-shadow:var(--shadow-sm)">
+      <div style="min-width:940px">
+        <div style="display:grid;grid-template-columns:170px minmax(220px,1fr) 96px 190px 110px 96px 96px 84px;gap:0;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
+          <span>טראק</span><span>שם הפריט</span><span>סוג</span><span>שותף / אחראי</span><span>סטטוס</span><span>התחלה</span><span>סיום</span><span></span>
+        </div>
+        ${rowsHtml || `<div style="border-top:1px solid var(--border);padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+          <strong style="font-size:14px;font-weight:600">לא נמצאו פריטים</strong>
+          <span style="font-size:13px;color:var(--muted-foreground);max-width:320px">אין פריטים שמתאימים לסינון הנוכחי. אפשר לנקות את הסינון ולנסות מחדש.</span>
+          <button type="button" onclick="clearFilters()" style="margin-top:6px;height:34px;padding:0 14px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;cursor:pointer">ניקוי סינון</button>
+        </div>`}
+      </div>
+    </div>
+  </div>`;
 }
 
-function clearItemFilters(){
-  document.getElementById('itemsFilterTrack').value = '';
-  document.getElementById('itemsFilterName').value = '';
-  document.getElementById('itemsFilterType').value = '';
-  document.getElementById('itemsFilterOwner').value = '';
-  document.getElementById('itemsFilterStatus').value = '';
-  document.getElementById('itemsFilterStart').value = '';
-  document.getElementById('itemsFilterEnd').value = '';
-  renderItems();
+function renderPartners(){
+  const canEdit = ui.role==='editor';
+  const items = state.items;
+  const maxLinked = Math.max(1, ...state.partners.map(p=>items.filter(i=>(i.owner||'').includes(p.name)).length));
+  const rowsHtml = state.partners.map(p=>{
+    const linked = items.filter(i=>(i.owner||'').includes(p.name)).length;
+    const tracksHtml = (p.tracks||[]).map(id=>{ const t=trackById(id); if(!t) return ''; return `<span style="${smallBadge(trackColor(id))}">${esc(t.name)}</span>`; }).join('');
+    return `
+    <div style="display:grid;grid-template-columns:minmax(220px,1fr) 250px minmax(200px,1fr) 140px;padding:12px 16px;align-items:center;border-top:1px solid var(--border);font-size:13px">
+      <span style="display:flex;flex-direction:column;gap:2px;padding-inline-end:12px">
+        <span style="font-weight:500">${esc(p.name)}</span>
+        <span style="font-size:11px;color:var(--muted-foreground)">${esc(p.notes||'—')}</span>
+      </span>
+      <span style="font-size:12px;color:var(--muted-foreground);padding-inline-end:12px;line-height:1.45">${esc(p.role||'')}</span>
+      <span style="display:flex;flex-wrap:wrap;gap:6px;padding-inline-end:12px">${tracksHtml}</span>
+      <span style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;min-width:14px">${linked}</span>
+        <span style="height:6px;flex:1;max-width:78px;border-radius:9999px;background:var(--muted);overflow:hidden;display:block"><span style="display:block;height:100%;width:${linked/maxLinked*100}%;background:var(--blue-500);border-radius:9999px"></span></span>
+        ${canEdit?`<button type="button" onclick='openAdd("partner", ${JSON.stringify(p).replace(/'/g,"&#39;")})' style="height:26px;padding:0 8px;border:1px solid var(--input);border-radius:8px;background:var(--background);color:var(--foreground);font-size:11px;cursor:pointer">עריכה</button>`:''}
+      </span>
+    </div>`;
+  }).join('');
+  return `
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:13px;color:var(--muted-foreground)">${state.partners.length} גורמים שותפים בפרויקט, משויכים לטראקים ולפריטים ספציפיים</span>
+      <span style="flex:1"></span>
+      ${canEdit?`<button type="button" onclick="openAdd('partner')" style="height:36px;padding:0 14px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;cursor:pointer">הוספת שותף</button>`:''}
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow-x:auto;box-shadow:var(--shadow-sm)">
+      <div style="min-width:880px">
+        <div style="display:grid;grid-template-columns:minmax(220px,1fr) 250px minmax(200px,1fr) 140px;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
+          <span>שותף / גורם</span><span>תפקיד בפרויקט</span><span>טראקים</span><span>פריטים מקושרים</span>
+        </div>
+        ${rowsHtml || `<div style="padding:32px;text-align:center;color:var(--muted-foreground);font-size:13px">אין עדיין שותפים</div>`}
+      </div>
+    </div>
+  </div>`;
 }
 
-function addItem(){
-  const name = document.getElementById('f-name').value.trim();
-  if(!name){ showToast('נא להזין שם פריט'); return; }
-  const item = {
-    id: state.nextItemId++,
-    track: Number(document.getElementById('f-track').value),
-    type: document.getElementById('f-type').value,
-    name,
-    owner: document.getElementById('f-owner').value.trim(),
-    status: document.getElementById('f-status').value,
-    start: document.getElementById('f-start').value || null,
-    end: document.getElementById('f-end').value || null,
-    notes: document.getElementById('f-notes').value.trim()
-  };
-  state.items.push(item);
-  ['f-name','f-owner','f-start','f-end','f-notes'].forEach(id=>document.getElementById(id).value='');
-  saveData();
-  renderAll();
-  showToast('הפריט נוסף');
-}
-
-async function deleteItem(id){
-  if(!(await customConfirm('למחוק את הפריט?'))) return;
-  state.items = state.items.filter(i=>i.id!==id);
-  saveData();
-  renderAll();
-}
-
-function openEdit(id){
-  const item = state.items.find(i=>i.id===id);
-  if(!item) return;
-  editingId = id;
-  document.getElementById('e-track').value = item.track;
-  document.getElementById('e-type').value = item.type;
-  document.getElementById('e-name').value = item.name;
-  document.getElementById('e-owner').value = item.owner || '';
-  document.getElementById('e-status').value = item.status;
-  document.getElementById('e-start').value = item.start || '';
-  document.getElementById('e-end').value = item.end || '';
-  document.getElementById('e-notes').value = item.notes || '';
-  document.getElementById('editModalBg').classList.add('show');
-}
-function closeEdit(){ document.getElementById('editModalBg').classList.remove('show'); editingId=null; }
-function saveEdit(){
-  const item = state.items.find(i=>i.id===editingId);
-  if(!item) return;
-  item.track = Number(document.getElementById('e-track').value);
-  item.type = document.getElementById('e-type').value;
-  item.name = document.getElementById('e-name').value.trim();
-  item.owner = document.getElementById('e-owner').value.trim();
-  item.status = document.getElementById('e-status').value;
-  item.start = document.getElementById('e-start').value || null;
-  item.end = document.getElementById('e-end').value || null;
-  item.notes = document.getElementById('e-notes').value.trim();
-  saveData();
-  renderAll();
-  closeEdit();
-  showToast('העריכה נשמרה');
-}
-
-// ---------- Tracks management ----------
 function renderTracks(){
-  const tbody = document.getElementById('tracksBody');
-  tbody.innerHTML = state.tracks.map(t=>{
-    const count = state.items.filter(i=>i.track===t.id).length;
-    return `<tr>
-      <td><span class="tag" style="background:var(--${t.color}bg);color:var(--${t.color})">${t.name}</span></td>
-      <td>${count}</td>
-      <td><button class="btn-icon" onclick="deleteTrack(${t.id})">מחיקה</button></td>
-    </tr>`;
+  const canEdit = ui.role==='editor';
+  const rowsHtml = state.tracks.map((t,i)=>{
+    const n = state.items.filter(it=>it.track===t.id).length;
+    const c = TRACK_COLORS[i%8];
+    const blocked = n>0 || !canEdit;
+    return `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-sm)">
+      <span style="width:10px;height:34px;border-radius:4px;background:${c.solid};flex-shrink:0"></span>
+      <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
+        <span style="font-size:13px;font-weight:600">${esc(t.name)}</span>
+        <span style="font-size:11px;color:var(--muted-foreground)">${n?n+' פריטים משויכים':'אין פריטים משויכים'}</span>
+      </span>
+      <button type="button" onclick="deleteTrack(${t.id})" title="${blocked?'לא ניתן למחוק — משויכים לו פריטים':'מחיקת הטראק'}"
+        style="height:30px;padding:0 12px;border-radius:8px;font-size:12px;font-family:inherit;border:1px solid var(--input);background:var(--background);color:${blocked?'var(--muted-foreground)':'var(--red-600)'};cursor:${blocked?'not-allowed':'pointer'};opacity:${blocked?.55:1}">מחיקה</button>
+    </div>`;
   }).join('');
-}
-function addTrack(){
-  const input = document.getElementById('newTrackName');
-  const name = input.value.trim();
-  if(!name){ showToast('נא להזין שם טראק'); return; }
-  const color = COLORS[state.tracks.length % COLORS.length];
-  state.tracks.push({ id: state.nextTrackId++, name, color });
-  input.value = '';
-  saveData();
-  renderAll();
-  showToast('הטראק נוסף');
-}
-async function deleteTrack(id){
-  const count = state.items.filter(i=>i.track===id).length;
-  if(count>0){ showToast('לא ניתן למחוק טראק עם פריטים משויכים'); return; }
-  if(!(await customConfirm('למחוק את הטראק?'))) return;
-  state.tracks = state.tracks.filter(t=>t.id!==id);
-  saveData();
-  renderAll();
+  return `
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <span style="font-size:13px;color:var(--muted-foreground)">לא ניתן למחוק טראק שמשויכים אליו פריטים — כפתור המחיקה חסום.</span>
+    ${ui.role==='editor' ? `<div style="display:flex;gap:8px;align-items:center">
+      <input id="newTrackName" type="text" placeholder="שם טראק חדש" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;width:260px" />
+      <button type="button" onclick="addTrackPrompt()" style="height:36px;padding:0 14px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-foreground);font-size:13px;font-weight:500;cursor:pointer">הוספת טראק</button>
+    </div>` : ''}
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">${rowsHtml}</div>
+  </div>`;
 }
 
-// ---------- Improvement requests (app + dashboard) ----------
-const urgencyLabel = {low:'נמוכה', medium:'בינונית', high:'גבוהה', urgent:'דחופה'};
-const reqStatusLabel = {pending:'ממתין לבדיקה', approved:'אושר לפיתוח', inprogress:'בפיתוח', done:'הושלם', rejected:'נדחה'};
-const urgencyColor = {low:'var(--gray)', medium:'var(--blue)', high:'var(--amber)', urgent:'var(--t3)'};
-
-function renderRequests(){
-  renderRequestTable('app','raBody');
-  renderRequestTable('dash','rdBody');
-}
-function renderRequestTable(category, bodyId){
-  const tbody = document.getElementById(bodyId);
-  const filterSelId = category==='app' ? 'raFilterUrgency' : 'rdFilterUrgency';
-  const fUrgency = document.getElementById(filterSelId).value;
-  let rows = state.requests.filter(r=>r.category===category && (!fUrgency || r.urgency===fUrgency));
-  rows = rows.slice().sort((a,b)=>{
-    if(!a.date && !b.date) return 0;
-    if(!a.date) return 1;
-    if(!b.date) return -1;
-    return a.date.localeCompare(b.date);
+function renderRequests(category){
+  const canEdit = ui.role==='editor';
+  const all = state.requests.filter(r=>r.category===category);
+  const filtered = all.filter(r=>{
+    if(ui.urgencyFilter && r.urgency!==ui.urgencyFilter) return false;
+    if(ui.reqQuery){ const q=ui.reqQuery.trim().toLowerCase();
+      if(!(r.title.toLowerCase().includes(q) || (r.notes||'').toLowerCase().includes(q) || (r.requester||'').toLowerCase().includes(q))) return false; }
+    return true;
   });
-  tbody.innerHTML = rows.length===0 ? '<tr><td colspan="6" class="empty">אין בקשות שיפור תואמות</td></tr>' :
-    rows.map(r=>`<tr>
-      <td><b>${r.title}</b>${r.notes ? `<div class="track-meta">${r.notes}</div>` : ''}</td>
-      <td>${r.date || '—'}</td>
-      <td>${r.requester || '—'}</td>
-      <td><span style="color:${urgencyColor[r.urgency]};font-weight:700;">${urgencyLabel[r.urgency]}</span></td>
-      <td>${reqStatusLabel[r.status]}</td>
-      <td><button class="btn-icon" onclick="openEditRequest(${r.id})">עריכה</button><button class="btn-icon" onclick="deleteRequest(${r.id})">מחיקה</button></td>
-    </tr>`).join('');
+  const toolbar = `
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <div style="display:flex;gap:4px;background:var(--muted);border-radius:8px;padding:3px">
+        <button type="button" onclick="setReqView('kanban')" style="${tabStyle(ui.reqView==='kanban')}">קנבן</button>
+        <button type="button" onclick="setReqView('table')" style="${tabStyle(ui.reqView==='table')}">טבלה</button>
+      </div>
+      <select onchange="onUrgencyFilter(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;outline:none">
+        <option value="">כל רמות הדחיפות</option><option value="urgent">דחופה</option><option value="high">גבוהה</option><option value="medium">בינונית</option><option value="low">נמוכה</option>
+      </select>
+      <input id="reqSearch" type="search" placeholder="חיפוש בבקשות" value="${esc(ui.reqQuery)}" oninput="onReqSearch(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;width:220px;outline:none" />
+      <span style="flex:1"></span>
+      ${canEdit?`<button type="button" onclick="openAdd('request')" style="height:36px;padding:0 14px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-foreground);font-size:13px;font-weight:500;cursor:pointer">בקשה חדשה</button>`:''}
+      <span style="font-size:12px;color:var(--muted-foreground)">${filtered.length} מתוך ${all.length} בקשות</span>
+    </div>`;
+
+  if(all.length===0){
+    return `
+    <div style="display:flex;flex-direction:column;gap:16px">
+      ${toolbar}
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:72px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:var(--shadow-sm)">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:var(--cyan-50);color:var(--cyan-700);font-size:18px;font-weight:600">0</span>
+        <strong style="font-size:15px;font-weight:600">טרם הוזנו בקשות שיפור</strong>
+        <span style="font-size:13px;color:var(--muted-foreground);max-width:400px;line-height:1.6">בקשות שיתקבלו יופיעו כאן, עם אותה תצוגת קנבן וטבלה.</span>
+      </div>
+    </div>`;
+  }
+
+  const decorate = r => ({ ...r, u:URGENCY[r.urgency], st:REQ_STATUS[r.status] });
+  if(ui.reqView==='kanban'){
+    const cols = REQ_STATUS_ORDER.map(key=>{
+      const cards = filtered.filter(r=>r.status===key).map(decorate);
+      const cardsHtml = cards.map(r=>`
+        <div onclick='openAdd("request", ${JSON.stringify(r).replace(/'/g,"&#39;")})' style="border:1px solid var(--border);border-radius:8px;background:var(--background);padding:10px 12px;display:flex;flex-direction:column;gap:8px;cursor:pointer">
+          <span style="font-size:12px;line-height:1.5;font-weight:500">${esc(r.title)}</span>
+          <span style="font-size:11px;color:var(--muted-foreground);line-height:1.45">${esc(r.notes||'')}</span>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="${smallBadge(r.u)}">${r.u.label}</span>
+            <span style="font-size:11px;color:var(--muted-foreground)">${esc(r.requester||'ללא מבקש מתועד')}</span>
+            <span style="flex:1"></span>
+            <span style="font-size:11px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${r.date?fmt(r.date):'—'}</span>
+          </div>
+        </div>`).join('');
+      return `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm)">
+        <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border)">
+          <span style="width:8px;height:8px;border-radius:9999px;background:${REQ_STATUS[key].solid};flex-shrink:0"></span>
+          <span style="font-size:13px;font-weight:600;flex:1">${REQ_STATUS[key].label}</span>
+          <span style="font-size:12px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${cards.length}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:12px;max-height:620px;overflow-y:auto">
+          ${cardsHtml || '<span style="font-size:12px;color:var(--muted-foreground);text-align:center;padding:18px 8px;border:1px dashed var(--border);border-radius:8px">אין בקשות בעמודה הזו</span>'}
+        </div>
+      </div>`;
+    }).join('');
+    return `<div style="display:flex;flex-direction:column;gap:16px">${toolbar}<div style="display:grid;grid-template-columns:repeat(5,minmax(210px,1fr));gap:12px;align-items:start">${cols}</div></div>`;
+  }
+  const rowsHtml = filtered.map(decorate).map(r=>`
+    <div onclick='openAdd("request", ${JSON.stringify(r).replace(/'/g,"&#39;")})' style="display:grid;grid-template-columns:minmax(300px,1fr) 110px 160px 110px 140px;padding:10px 16px;align-items:center;border-top:1px solid var(--border);font-size:13px;cursor:pointer">
+      <span style="display:flex;flex-direction:column;gap:2px;padding-inline-end:14px">
+        <span style="font-weight:500">${esc(r.title)}</span>
+        <span style="font-size:11px;color:var(--muted-foreground)">${esc(r.notes||'')}</span>
+      </span>
+      <span style="font-size:12px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${r.date?fmt(r.date):'—'}</span>
+      <span style="font-size:12px;color:var(--muted-foreground)">${esc(r.requester||'—')}</span>
+      <span><span style="${smallBadge(r.u)}">${r.u.label}</span></span>
+      <span><span style="${smallBadge(r.st)}">${r.st.label}</span></span>
+    </div>`).join('');
+  return `
+  <div style="display:flex;flex-direction:column;gap:16px">${toolbar}
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow-x:auto;box-shadow:var(--shadow-sm)">
+      <div style="min-width:920px">
+        <div style="display:grid;grid-template-columns:minmax(300px,1fr) 110px 160px 110px 140px;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
+          <span>תיאור הבקשה</span><span>תאריך</span><span>מבקש</span><span>דחיפות</span><span>סטטוס</span>
+        </div>
+        ${rowsHtml}
+      </div>
+    </div>
+  </div>`;
 }
 
-function addRequest(category){
-  const p = category==='app' ? 'ra' : 'rd';
-  const title = document.getElementById(`${p}-title`).value.trim();
-  if(!title){ showToast('נא להזין תיאור לבקשה'); return; }
-  const req = {
-    id: state.nextRequestId++,
-    category,
-    title,
-    date: document.getElementById(`${p}-date`).value || null,
-    requester: document.getElementById(`${p}-requester`).value.trim(),
-    urgency: document.getElementById(`${p}-urgency`).value,
-    status: document.getElementById(`${p}-status`).value,
-    notes: document.getElementById(`${p}-notes`).value.trim()
-  };
-  state.requests.push(req);
-  [`${p}-title`,`${p}-date`,`${p}-requester`,`${p}-notes`].forEach(id=>document.getElementById(id).value='');
-  document.getElementById(`${p}-urgency`).value = 'medium';
-  document.getElementById(`${p}-status`).value = 'pending';
-  saveData();
-  renderAll();
-  showToast('הבקשה נוספה');
-}
-
-function openEditRequest(id){
-  const r = state.requests.find(x=>x.id===id);
-  if(!r) return;
-  editingRequestId = id;
-  document.getElementById('re-title').value = r.title;
-  document.getElementById('re-date').value = r.date || '';
-  document.getElementById('re-requester').value = r.requester || '';
-  document.getElementById('re-urgency').value = r.urgency;
-  document.getElementById('re-status').value = r.status;
-  document.getElementById('re-notes').value = r.notes || '';
-  document.getElementById('editRequestModalBg').classList.add('show');
-}
-function closeRequestEdit(){ document.getElementById('editRequestModalBg').classList.remove('show'); editingRequestId=null; }
-function saveRequestEdit(){
-  const r = state.requests.find(x=>x.id===editingRequestId);
-  if(!r) return;
-  r.title = document.getElementById('re-title').value.trim();
-  r.date = document.getElementById('re-date').value || null;
-  r.requester = document.getElementById('re-requester').value.trim();
-  r.urgency = document.getElementById('re-urgency').value;
-  r.status = document.getElementById('re-status').value;
-  r.notes = document.getElementById('re-notes').value.trim();
-  saveData();
-  renderAll();
-  closeRequestEdit();
-  showToast('העריכה נשמרה');
-}
-async function deleteRequest(id){
-  if(!(await customConfirm('למחוק את בקשת השיפור?'))) return;
-  state.requests = state.requests.filter(r=>r.id!==id);
-  saveData();
-  renderAll();
-}
-
-// ---------- Training log ----------
 function renderTrainings(){
-  const fUnit = document.getElementById('trFilterUnit').value.trim().toLowerCase();
-  const tbody = document.getElementById('trainingsBody');
-  let rows = state.trainings.filter(t=> !fUnit || t.unit.toLowerCase().includes(fUnit));
-  rows = rows.slice().sort((a,b)=>{
-    if(!a.date && !b.date) return 0;
-    if(!a.date) return 1;
-    if(!b.date) return -1;
-    return b.date.localeCompare(a.date);
-  });
-  tbody.innerHTML = rows.length===0 ? '<tr><td colspan="5" class="empty">אין עדיין הדרכות מתועדות</td></tr>' :
-    rows.map(t=>`<tr>
-      <td><b>${t.unit}</b></td>
-      <td>${t.date || '—'}</td>
-      <td>${t.instructor || '—'}</td>
-      <td>${t.notes || '—'}</td>
-      <td><button class="btn-icon" onclick="openEditTraining(${t.id})">עריכה</button><button class="btn-icon" onclick="deleteTraining(${t.id})">מחיקה</button></td>
-    </tr>`).join('');
+  const canEdit = ui.role==='editor';
+  const q = ui.trainingsQuery.trim().toLowerCase();
+  const rows = state.trainings.filter(t=>!q || t.unit.toLowerCase().includes(q))
+    .slice().sort((a,b)=>{ if(!a.date&&!b.date) return 0; if(!a.date) return 1; if(!b.date) return -1; return b.date.localeCompare(a.date); });
+  const rowsHtml = rows.map(t=>`
+    <div onclick='${canEdit?`openAdd("training", ${JSON.stringify(t).replace(/'/g,"&#39;")})`:''}' style="display:grid;grid-template-columns:220px 120px 200px minmax(160px,1fr);padding:10px 16px;align-items:center;border-top:1px solid var(--border);font-size:13px;${canEdit?'cursor:pointer':''}">
+      <span style="font-weight:500">${esc(t.unit)}</span>
+      <span style="font-size:12px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${t.date?fmt(t.date):'—'}</span>
+      <span style="font-size:12px;color:var(--muted-foreground)">${esc(t.instructor||'—')}</span>
+      <span style="font-size:12px;color:var(--muted-foreground)">${esc(t.notes||'—')}</span>
+    </div>`).join('');
+  return `
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <input id="trainingsSearch" type="search" placeholder="סינון לפי שם יחידה" value="${esc(ui.trainingsQuery)}" oninput="onTrainingsSearch(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;width:240px;outline:none" />
+      <span style="flex:1"></span>
+      ${canEdit?`<button type="button" onclick="openAdd('training')" style="height:36px;padding:0 14px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-foreground);font-size:13px;font-weight:500;cursor:pointer">תיעוד הדרכה</button>`:''}
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-sm)">
+      <div style="display:grid;grid-template-columns:220px 120px 200px minmax(160px,1fr);padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
+        <span>יחידה</span><span>תאריך</span><span>מדריך</span><span>הערות</span>
+      </div>
+      ${rowsHtml || `<div style="padding:64px 24px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;border-top:1px solid var(--border)">
+        <strong style="font-size:15px;font-weight:600">אין הדרכות מתועדות</strong>
+        <span style="font-size:13px;color:var(--muted-foreground);max-width:420px;line-height:1.6">כל הדרכה שמתועדת כאן נכנסת למעקב שיעור ההטמעה ביחידות: יחידה, תאריך, מדריך והערות.</span>
+      </div>`}
+    </div>
+  </div>`;
 }
 
-function addTraining(){
-  const unit = document.getElementById('tr-unit').value.trim();
-  if(!unit){ showToast('נא להזין יחידה'); return; }
-  const training = {
-    id: state.nextTrainingId++,
-    unit,
-    date: document.getElementById('tr-date').value || null,
-    instructor: document.getElementById('tr-instructor').value.trim(),
-    notes: document.getElementById('tr-notes').value.trim()
-  };
-  state.trainings.push(training);
-  ['tr-unit','tr-date','tr-instructor','tr-notes'].forEach(id=>document.getElementById(id).value='');
-  saveData();
-  renderAll();
-  showToast('ההדרכה תועדה');
+// ==== Modal ====
+function fieldWrap(label, inner){ return `<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">${esc(label)}${inner}</label>`; }
+const CTRL = 'height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;';
+
+function renderModal(){
+  if(!ui.addOpen || !ui.form) return '';
+  const f = ui.form;
+  let title='', sub='', fields='', deleteBtn='';
+  if(ui.addKind==='item'){
+    title = f.id ? 'עריכת פריט' : 'פריט חדש'; sub='משימה או אבן דרך; תאריכים אפשר להשלים בהמשך';
+    const trackOpts = state.tracks.map(t=>`<option value="${t.id}" ${Number(f.track)===t.id?'selected':''}>${esc(t.name)}</option>`).join('');
+    fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+      ${fieldWrap('טראק', `<select onchange="setForm('track', this.value)" style="${CTRL}">${trackOpts}</select>`)}
+      ${fieldWrap('סוג', `<select onchange="setForm('type', this.value)" style="${CTRL}"><option value="task" ${f.type==='task'?'selected':''}>משימה</option><option value="milestone" ${f.type==='milestone'?'selected':''}>אבן דרך</option></select>`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">שם הפריט<input type="text" value="${esc(f.name)}" oninput="setForm('name', this.value)" placeholder="לדוגמה: בדיקות אינטגרציה" style="${CTRL}" /></label>
+      ${fieldWrap('שותף / אחראי', `<input type="text" value="${esc(f.owner)}" oninput="setForm('owner', this.value)" placeholder="לדוגמה: צוות פיתוח פנימי" style="${CTRL}" />`)}
+      ${fieldWrap('סטטוס', `<select onchange="setForm('status', this.value)" style="${CTRL}"><option value="planned" ${f.status==='planned'?'selected':''}>מתוכנן</option><option value="ongoing" ${f.status==='ongoing'?'selected':''}>בתהליך</option><option value="done" ${f.status==='done'?'selected':''}>הושלם</option></select>`)}
+      ${fieldWrap('תאריך התחלה', `<input type="date" value="${esc(f.start)}" oninput="setForm('start', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('תאריך סיום', `<input type="date" value="${esc(f.end)}" oninput="setForm('end', this.value)" style="${CTRL}" />`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
+    </div>`;
+    if(f.id) deleteBtn = `<button type="button" onclick="deleteItemRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
+  } else if(ui.addKind==='partner'){
+    title = f.id ? 'עריכת שותף' : 'הוספת שותף'; sub='שם, תפקיד וטראקים רלוונטיים';
+    fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+      ${fieldWrap('שם השותף / הגורם', `<input type="text" value="${esc(f.name)}" oninput="setForm('name', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('תפקיד בפרויקט', `<input type="text" value="${esc(f.role)}" oninput="setForm('role', this.value)" style="${CTRL}" />`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">מזהי טראקים (מופרדים בפסיק, לדוגמה 1,2)<input type="text" value="${esc(f.tracksStr)}" oninput="setForm('tracksStr', this.value)" style="${CTRL}" /></label>
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
+    </div>`;
+    if(f.id) deleteBtn = `<button type="button" onclick="deletePartnerRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
+  } else if(ui.addKind==='training'){
+    title = f.id ? 'עריכת הדרכה' : 'תיעוד הדרכה'; sub='יחידה, תאריך ומדריך';
+    fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+      ${fieldWrap('יחידה', `<input type="text" value="${esc(f.unit)}" oninput="setForm('unit', this.value)" placeholder="לדוגמה: גדוד 7031" style="${CTRL}" />`)}
+      ${fieldWrap('תאריך ההדרכה', `<input type="date" value="${esc(f.date)}" oninput="setForm('date', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('מי הדריך', `<input type="text" value="${esc(f.instructor)}" oninput="setForm('instructor', this.value)" style="${CTRL}" />`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
+    </div>`;
+    if(f.id) deleteBtn = `<button type="button" onclick="deleteTrainingRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
+  } else if(ui.addKind==='request'){
+    title = f.id ? 'עריכת בקשת שיפור' : 'בקשת שיפור חדשה'; sub = f.category==='dash' ? 'לדשבורד' : 'לאפליקציה';
+    fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">תיאור הבקשה<input type="text" value="${esc(f.title)}" oninput="setForm('title', this.value)" style="${CTRL}" /></label>
+      ${fieldWrap('מבקש', `<input type="text" value="${esc(f.requester)}" oninput="setForm('requester', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('תאריך', `<input type="date" value="${esc(f.date)}" oninput="setForm('date', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('דחיפות', `<select onchange="setForm('urgency', this.value)" style="${CTRL}">${Object.keys(URGENCY).map(k=>`<option value="${k}" ${f.urgency===k?'selected':''}>${URGENCY[k].label}</option>`).join('')}</select>`)}
+      ${fieldWrap('סטטוס', `<select onchange="setForm('status', this.value)" style="${CTRL}">${REQ_STATUS_ORDER.map(k=>`<option value="${k}" ${f.status===k?'selected':''}>${REQ_STATUS[k].label}</option>`).join('')}</select>`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
+    </div>`;
+    if(f.id) deleteBtn = `<button type="button" onclick="deleteRequestRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
+  }
+  return `
+  <div onclick="closeAdd()" style="position:fixed;inset:0;background:var(--overlay-scrim);display:flex;align-items:center;justify-content:center;z-index:40;padding:24px">
+    <div onclick="event.stopPropagation()" style="background:var(--card);color:var(--foreground);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-overlay);width:min(560px,100%);max-height:86vh;overflow:auto;padding:22px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <strong style="font-size:16px;font-weight:600">${esc(title)}</strong>
+        <span style="font-size:12px;color:var(--muted-foreground)">${esc(sub)}</span>
+      </div>
+      ${fields}
+      <div style="display:flex;justify-content:flex-start;gap:8px;padding-top:4px">
+        <button type="button" onclick="submitAdd()" style="height:36px;padding:0 16px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-foreground);font-size:13px;font-weight:500;cursor:pointer">${f.id?'שמירה':'הוספה'}</button>
+        <button type="button" onclick="closeAdd()" style="height:36px;padding:0 16px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;cursor:pointer">ביטול</button>
+        ${deleteBtn}
+      </div>
+    </div>
+  </div>`;
 }
 
-function openEditTraining(id){
-  const t = state.trainings.find(x=>x.id===id);
-  if(!t) return;
-  editingTrainingId = id;
-  document.getElementById('te-unit').value = t.unit;
-  document.getElementById('te-date').value = t.date || '';
-  document.getElementById('te-instructor').value = t.instructor || '';
-  document.getElementById('te-notes').value = t.notes || '';
-  document.getElementById('editTrainingModalBg').classList.add('show');
-}
-function closeTrainingEdit(){ document.getElementById('editTrainingModalBg').classList.remove('show'); editingTrainingId=null; }
-function saveTrainingEdit(){
-  const t = state.trainings.find(x=>x.id===editingTrainingId);
-  if(!t) return;
-  t.unit = document.getElementById('te-unit').value.trim();
-  t.date = document.getElementById('te-date').value || null;
-  t.instructor = document.getElementById('te-instructor').value.trim();
-  t.notes = document.getElementById('te-notes').value.trim();
-  saveData();
-  renderAll();
-  closeTrainingEdit();
-  showToast('העריכה נשמרה');
-}
-async function deleteTraining(id){
-  if(!(await customConfirm('למחוק את תיעוד ההדרכה?'))) return;
-  state.trainings = state.trainings.filter(t=>t.id!==id);
-  saveData();
-  renderAll();
+function renderConfirm(){
+  if(!ui.confirmOpen) return '';
+  return `
+  <div style="position:fixed;inset:0;background:var(--overlay-scrim);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px">
+    <div style="background:var(--card);color:var(--foreground);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-overlay);width:min(360px,100%);padding:20px;display:flex;flex-direction:column;gap:16px">
+      <strong style="font-size:15px;font-weight:600">${esc(ui.confirmMsg)}</strong>
+      <div style="display:flex;justify-content:flex-start;gap:8px">
+        <button type="button" onclick="confirmYes()" style="height:36px;padding:0 16px;border:none;border-radius:10px;background:var(--red-600);color:#fff;font-size:13px;cursor:pointer">מחיקה</button>
+        <button type="button" onclick="confirmNo()" style="height:36px;padding:0 16px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;cursor:pointer">ביטול</button>
+      </div>
+    </div>
+  </div>`;
 }
 
-// ---------- Firebase-backed storage shim (replaces the claude.ai window.storage API) ----------
+function renderContent(){
+  switch(ui.view){
+    case 'overview': return renderOverview();
+    case 'gantt': return renderGantt();
+    case 'items': return renderItems();
+    case 'partners': return renderPartners();
+    case 'tracks': return renderTracks();
+    case 'reqApp': return renderRequests('app');
+    case 'reqDash': return renderRequests('dash');
+    case 'trainings': return renderTrainings();
+    default: return '';
+  }
+}
+
+function renderApp(){
+  return `
+  <div dir="rtl" lang="he" style="display:flex;min-height:100vh;background:var(--background);color:var(--foreground);font-family:var(--font-hebrew);font-size:14px;line-height:1.5;width:100%">
+    ${renderSidebar()}
+    <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+      ${renderHeader()}
+      <div style="flex:1;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:20px">${renderContent()}</div>
+    </main>
+    ${renderModal()}
+    ${renderConfirm()}
+  </div>`;
+}
+
+// ==== Firebase storage shim + boot ====
 (async function initStorageAndLoad(){
-  const el = document.getElementById('saveState');
   try{
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js");
     const { getFirestore, doc, getDoc, setDoc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js");
-
-    if(firebaseConfig.apiKey === "REPLACE_ME"){
-      throw new Error('firebaseConfig לא הוגדר עדיין');
-    }
-
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const COLLECTION = 'roadmap_data';
-
     window.storage = {
-      get: async (key) => {
-        const snap = await getDoc(doc(db, COLLECTION, key));
-        return snap.exists() ? { value: snap.data().value } : null;
-      },
-      set: async (key, value) => {
-        await setDoc(doc(db, COLLECTION, key), { value, updatedAt: Date.now() });
-        return true;
-      }
+      get: async (key) => { const snap = await getDoc(doc(db, COLLECTION, key)); return snap.exists() ? { value: snap.data().value } : null; },
+      set: async (key, value) => { await setDoc(doc(db, COLLECTION, key), { value, updatedAt: Date.now() }); return true; }
     };
-
-    // עדכון חי: אם מישהו אחר שומר שינוי, המסך יתעדכן אוטומטית
     onSnapshot(doc(db, COLLECTION, STORAGE_KEY), (snap) => {
       if(!snap.exists()) return;
       const remoteState = JSON.parse(snap.data().value);
       if(JSON.stringify(remoteState) !== JSON.stringify(state)){
-        state = remoteState;
-        renderAll();
-        el.textContent = 'עודכן בזמן אמת';
+        state = { ...seed(), ...remoteState };
+        ui.saveState = 'עודכן בזמן אמת';
+        render();
       }
     });
   } catch(e){
     console.warn('Firebase לא זמין, עובד עם אחסון מקומי בדפדפן בלבד:', e.message);
     window.storage = {
-      get: async (key) => {
-        const v = localStorage.getItem(key);
-        return v ? { value: v } : null;
-      },
-      set: async (key, value) => {
-        localStorage.setItem(key, value);
-        return true;
-      }
+      get: async (key) => { const v = localStorage.getItem(key); return v ? { value: v } : null; },
+      set: async (key, value) => { localStorage.setItem(key, value); return true; }
     };
   }
   loadData();
