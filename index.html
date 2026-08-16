@@ -836,43 +836,43 @@ function renderModal(){
     title = f.id ? 'עריכת פריט' : 'פריט חדש'; sub='משימה או אבן דרך; תאריכים אפשר להשלים בהמשך';
     const trackOpts = state.tracks.map(t=>`<option value="${t.id}" ${Number(f.track)===t.id?'selected':''}>${esc(t.name)}</option>`).join('');
     fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
-      ${fieldWrap('טראק', `<select onchange="setForm('track', this.value)" style="${CTRL}">${trackOpts}</select>`)}
-      ${fieldWrap('סוג', `<select onchange="setForm('type', this.value)" style="${CTRL}"><option value="task" ${f.type==='task'?'selected':''}>משימה</option><option value="milestone" ${f.type==='milestone'?'selected':''}>אבן דרך</option></select>`)}
-      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">שם הפריט<input type="text" value="${esc(f.name)}" oninput="setForm('name', this.value)" placeholder="לדוגמה: בדיקות אינטגרציה" style="${CTRL}" /></label>
-      ${fieldWrap('שותף / אחראי', `<input type="text" value="${esc(f.owner)}" oninput="setForm('owner', this.value)" placeholder="לדוגמה: צוות פיתוח פנימי" style="${CTRL}" />`)}
-      ${fieldWrap('סטטוס', `<select onchange="setForm('status', this.value)" style="${CTRL}"><option value="planned" ${f.status==='planned'?'selected':''}>מתוכנן</option><option value="ongoing" ${f.status==='ongoing'?'selected':''}>בתהליך</option><option value="done" ${f.status==='done'?'selected':''}>הושלם</option></select>`)}
-      ${fieldWrap('תאריך התחלה', `<input type="date" value="${esc(f.start)}" oninput="setForm('start', this.value)" style="${CTRL}" />`)}
-      ${fieldWrap('תאריך סיום', `<input type="date" value="${esc(f.end)}" oninput="setForm('end', this.value)" style="${CTRL}" />`)}
-      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
+      ${fieldWrap('טראק', `<select id="f-track" onchange="setForm('track', this.value)" style="${CTRL}">${trackOpts}</select>`)}
+      ${fieldWrap('סוג', `<select id="f-type" onchange="setForm('type', this.value)" style="${CTRL}"><option value="task" ${f.type==='task'?'selected':''}>משימה</option><option value="milestone" ${f.type==='milestone'?'selected':''}>אבן דרך</option></select>`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">שם הפריט<input type="text" value="${esc(f.name)}" id="f-name" oninput="setForm('name', this.value)" placeholder="לדוגמה: בדיקות אינטגרציה" style="${CTRL}" /></label>
+      ${fieldWrap('שותף / אחראי', `<input type="text" value="${esc(f.owner)}" id="f-owner" oninput="setForm('owner', this.value)" placeholder="לדוגמה: צוות פיתוח פנימי" style="${CTRL}" />`)}
+      ${fieldWrap('סטטוס', `<select id="f-status" onchange="setForm('status', this.value)" style="${CTRL}"><option value="planned" ${f.status==='planned'?'selected':''}>מתוכנן</option><option value="ongoing" ${f.status==='ongoing'?'selected':''}>בתהליך</option><option value="done" ${f.status==='done'?'selected':''}>הושלם</option></select>`)}
+      ${fieldWrap('תאריך התחלה', `<input type="date" value="${esc(f.start)}" id="f-start" oninput="setForm('start', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('תאריך סיום', `<input type="date" value="${esc(f.end)}" id="f-end" oninput="setForm('end', this.value)" style="${CTRL}" />`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea id="f-notes" oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
     </div>`;
     if(f.id) deleteBtn = `<button type="button" onclick="deleteItemRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
   } else if(ui.addKind==='partner'){
     title = f.id ? 'עריכת שותף' : 'הוספת שותף'; sub='שם, תפקיד וטראקים רלוונטיים';
     fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
-      ${fieldWrap('שם השותף / הגורם', `<input type="text" value="${esc(f.name)}" oninput="setForm('name', this.value)" style="${CTRL}" />`)}
-      ${fieldWrap('תפקיד בפרויקט', `<input type="text" value="${esc(f.role)}" oninput="setForm('role', this.value)" style="${CTRL}" />`)}
-      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">מזהי טראקים (מופרדים בפסיק, לדוגמה 1,2)<input type="text" value="${esc(f.tracksStr)}" oninput="setForm('tracksStr', this.value)" style="${CTRL}" /></label>
-      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
+      ${fieldWrap('שם השותף / הגורם', `<input type="text" value="${esc(f.name)}" id="f-name" oninput="setForm('name', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('תפקיד בפרויקט', `<input type="text" value="${esc(f.role)}" id="f-role" oninput="setForm('role', this.value)" style="${CTRL}" />`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">מזהי טראקים (מופרדים בפסיק, לדוגמה 1,2)<input type="text" value="${esc(f.tracksStr)}" id="f-tracksStr" oninput="setForm('tracksStr', this.value)" style="${CTRL}" /></label>
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea id="f-notes" oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
     </div>`;
     if(f.id) deleteBtn = `<button type="button" onclick="deletePartnerRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
   } else if(ui.addKind==='training'){
     title = f.id ? 'עריכת הדרכה' : 'תיעוד הדרכה'; sub='יחידה, תאריך ומדריך';
     fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
-      ${fieldWrap('יחידה', `<input type="text" value="${esc(f.unit)}" oninput="setForm('unit', this.value)" placeholder="לדוגמה: גדוד 7031" style="${CTRL}" />`)}
-      ${fieldWrap('תאריך ההדרכה', `<input type="date" value="${esc(f.date)}" oninput="setForm('date', this.value)" style="${CTRL}" />`)}
-      ${fieldWrap('מי הדריך', `<input type="text" value="${esc(f.instructor)}" oninput="setForm('instructor', this.value)" style="${CTRL}" />`)}
-      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
+      ${fieldWrap('יחידה', `<input type="text" value="${esc(f.unit)}" id="f-unit" oninput="setForm('unit', this.value)" placeholder="לדוגמה: גדוד 7031" style="${CTRL}" />`)}
+      ${fieldWrap('תאריך ההדרכה', `<input type="date" value="${esc(f.date)}" id="f-date" oninput="setForm('date', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('מי הדריך', `<input type="text" value="${esc(f.instructor)}" id="f-instructor" oninput="setForm('instructor', this.value)" style="${CTRL}" />`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea id="f-notes" oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
     </div>`;
     if(f.id) deleteBtn = `<button type="button" onclick="deleteTrainingRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
   } else if(ui.addKind==='request'){
     title = f.id ? 'עריכת בקשת שיפור' : 'בקשת שיפור חדשה'; sub = f.category==='dash' ? 'לדשבורד' : 'לאפליקציה';
     fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
-      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">תיאור הבקשה<input type="text" value="${esc(f.title)}" oninput="setForm('title', this.value)" style="${CTRL}" /></label>
-      ${fieldWrap('מבקש', `<input type="text" value="${esc(f.requester)}" oninput="setForm('requester', this.value)" style="${CTRL}" />`)}
-      ${fieldWrap('תאריך', `<input type="date" value="${esc(f.date)}" oninput="setForm('date', this.value)" style="${CTRL}" />`)}
-      ${fieldWrap('דחיפות', `<select onchange="setForm('urgency', this.value)" style="${CTRL}">${Object.keys(URGENCY).map(k=>`<option value="${k}" ${f.urgency===k?'selected':''}>${URGENCY[k].label}</option>`).join('')}</select>`)}
-      ${fieldWrap('סטטוס', `<select onchange="setForm('status', this.value)" style="${CTRL}">${REQ_STATUS_ORDER.map(k=>`<option value="${k}" ${f.status===k?'selected':''}>${REQ_STATUS[k].label}</option>`).join('')}</select>`)}
-      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">תיאור הבקשה<input type="text" value="${esc(f.title)}" id="f-title" oninput="setForm('title', this.value)" style="${CTRL}" /></label>
+      ${fieldWrap('מבקש', `<input type="text" value="${esc(f.requester)}" id="f-requester" oninput="setForm('requester', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('תאריך', `<input type="date" value="${esc(f.date)}" id="f-date" oninput="setForm('date', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('דחיפות', `<select id="f-urgency" onchange="setForm('urgency', this.value)" style="${CTRL}">${Object.keys(URGENCY).map(k=>`<option value="${k}" ${f.urgency===k?'selected':''}>${URGENCY[k].label}</option>`).join('')}</select>`)}
+      ${fieldWrap('סטטוס', `<select id="f-status" onchange="setForm('status', this.value)" style="${CTRL}">${REQ_STATUS_ORDER.map(k=>`<option value="${k}" ${f.status===k?'selected':''}>${REQ_STATUS[k].label}</option>`).join('')}</select>`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea id="f-notes" oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
     </div>`;
     if(f.id) deleteBtn = `<button type="button" onclick="deleteRequestRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
   }
