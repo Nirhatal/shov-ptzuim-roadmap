@@ -85,7 +85,7 @@ const REQ_STATUS = {
   approved: { label: 'אושר לפיתוח', bg: 'var(--indigo-50)', fg: 'var(--indigo-700)', solid: 'var(--indigo-500)' },
   inprogress: { label: 'בפיתוח', bg: 'var(--blue-50)', fg: 'var(--blue-700)', solid: 'var(--blue-500)' },
   done: { label: 'הושלם', bg: 'var(--emerald-50)', fg: 'var(--emerald-700)', solid: 'var(--emerald-500)' },
-  rejected: { label: 'נדחה', bg: 'var(--red-50)', fg: 'var(--red-700)', solid: 'var(--red-500)' }
+  rejected: { label: 'מחכה לתשובה', bg: 'var(--red-50)', fg: 'var(--red-700)', solid: 'var(--red-500)' }
 };
 
 const NAV_MAIN = [
@@ -762,7 +762,7 @@ function renderPartners(){
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow-x:auto;box-shadow:var(--shadow-sm)">
       <div style="min-width:960px">
         <div style="display:grid;grid-template-columns:minmax(200px,1fr) 130px 220px minmax(180px,1fr) 140px;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
-          <span>שותף / גורם</span><span>טלפון</span><span>תפקיד בפרויקט</span><span>טראקים</span><span>פריטים מקושרים</span>
+          <span>שם השותף</span><span>טלפון</span><span>תפקיד</span><span>טראקים</span><span>פריטים מקושרים</span>
         </div>
         ${rowsHtml || `<div style="padding:32px;text-align:center;color:var(--muted-foreground);font-size:13px">אין עדיין שותפים</div>`}
       </div>
@@ -956,7 +956,7 @@ function renderModal(){
     fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
       ${fieldWrap('שם השותף', `<input type="text" value="${esc(f.name)}" id="f-name" oninput="setForm('name', this.value)" placeholder="טקסט חופשי" style="${CTRL}" />`)}
       ${fieldWrap('מספר טלפון', `<input type="tel" inputmode="numeric" value="${esc(f.phone)}" id="f-phone" oninput="setFormNumeric('phone', this.value)" placeholder="לדוגמה: 0501234567" style="${CTRL}direction:ltr;text-align:end;" />`)}
-      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">תפקיד בפרויקט<input type="text" value="${esc(f.role)}" id="f-role" oninput="setForm('role', this.value)" style="${CTRL}" /></label>
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">תפקיד<input type="text" value="${esc(f.role)}" id="f-role" oninput="setForm('role', this.value)" style="${CTRL}" /></label>
       <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">מזהי טראקים (מופרדים בפסיק, לדוגמה 1,2)<input type="text" value="${esc(f.tracksStr)}" id="f-tracksStr" oninput="setForm('tracksStr', this.value)" style="${CTRL}" /></label>
       <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea id="f-notes" oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
     </div>`;
