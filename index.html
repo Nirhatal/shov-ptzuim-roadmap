@@ -209,7 +209,7 @@ function seed(){
     ['סימון של אירוע בטיחות','','medium','pending','','2026-04-26'],
     ['הוספה של קרפ"ח במסגרת עם הרשאה לצפייה כמו לבנת פינוי חטיבתית','','medium','pending','','2026-07-16']
   ];
-  const requests = APP_REQ_RAW.map((r,i)=>({ id:i+1, category:'app', title:r[0], requester:r[1], urgency:r[2], status:r[3], notes:r[4], date:r[5]||null }));
+  const requests = APP_REQ_RAW.map((r,i)=>({ id:i+1, category:'app', title:r[0], requester:r[1], urgency:r[2], status:r[3], notes:r[4], date:r[5]||null, track:null }));
   return {
     tracks, items, partners, requests, trainings: [],
     nextTrackId: tracks.length+1, nextItemId: items.length+1, nextPartnerId: partners.length+1,
@@ -221,12 +221,13 @@ function seed(){
 let state = { tracks:[], items:[], partners:[], requests:[], trainings:[], nextTrackId:1, nextItemId:1, nextPartnerId:1, nextRequestId:1, nextTrainingId:1 };
 let ui = {
   view: 'overview', role: 'editor', loading: true,
-  query: '', trackFilter: '', statusFilter: '', typeFilter: '',
+  query: '', trackFilter: '', statusFilter: '', typeFilter: '', itemsView: 'table',
   reqView: 'kanban', urgencyFilter: '', reqQuery: '', trainingsQuery: '',
-  addOpen: false, addKind: null, form: null,
+  addOpen: false, addKind: null, form: null, formError: '',
   confirmOpen: false, confirmMsg: '', confirmFn: null,
   saveState: 'טוען...'
 };
+let dragPayload = null;
 
 function trackById(id){ return state.tracks.find(t=>t.id===id); }
 function trackColor(id){ const idx = state.tracks.findIndex(t=>t.id===id); return TRACK_COLORS[(idx<0?0:idx)%8]; }
@@ -266,13 +267,26 @@ async function saveData(){
   render();
 }
 
-// ==== Focus-preserving re-render ====
+// ==== Focus- and scroll-preserving re-render ====
 function render(){
   const active = document.activeElement;
   const activeId = active && active.id;
   const selStart = active && 'selectionStart' in active ? active.selectionStart : null;
   const selEnd = active && 'selectionEnd' in active ? active.selectionEnd : null;
+  // The page itself scrolls (no ancestor constrains #mainContent's height enough
+  // for its own overflow:auto to kick in), so the scroll position that actually
+  // needs preserving is the window's, not #mainContent's.
+  const windowScroll = window.scrollY;
+  const mainEl = document.getElementById('mainContent');
+  const mainScroll = mainEl ? mainEl.scrollTop : 0;
+  const modalEl = document.getElementById('modalScroll');
+  const modalScroll = modalEl ? modalEl.scrollTop : 0;
   document.getElementById('app').innerHTML = renderApp();
+  window.scrollTo(0, windowScroll);
+  const newMain = document.getElementById('mainContent');
+  if(newMain) newMain.scrollTop = mainScroll;
+  const newModal = document.getElementById('modalScroll');
+  if(newModal) newModal.scrollTop = modalScroll;
   if(activeId){
     const el = document.getElementById(activeId);
     if(el){
@@ -296,24 +310,39 @@ function setReqView(v){ ui.reqView=v; render(); }
 function onUrgencyFilter(v){ ui.urgencyFilter=v; render(); }
 function onReqSearch(v){ ui.reqQuery=v; render(); }
 function onTrainingsSearch(v){ ui.trainingsQuery=v; render(); }
+function setItemsView(v){ ui.itemsView=v; render(); }
+
+// ==== Drag & drop between kanban columns ====
+function onDragStart(kind, id){ dragPayload = { kind, id }; }
+function onDropColumn(kind, status){
+  if(!dragPayload || dragPayload.kind!==kind || ui.role!=='editor'){ dragPayload=null; return; }
+  if(kind==='request'){ state.requests = state.requests.map(r=>r.id===dragPayload.id ? {...r, status} : r); }
+  else if(kind==='item'){ state.items = state.items.map(i=>i.id===dragPayload.id ? {...i, status} : i); }
+  dragPayload = null;
+  saveData();
+}
 
 // ==== Modal (add/edit) ====
 function openAdd(kind, existing){
   ui.addKind = kind;
   ui.addOpen = true;
+  ui.formError = '';
   if(kind==='item'){
     ui.form = existing ? {...existing, start: existing.start||'', end: existing.end||''} : {track: state.tracks[0]?.id||1, type:'task', name:'', owner:'', status:'planned', start:'', end:'', notes:''};
   } else if(kind==='partner'){
-    ui.form = existing ? {...existing, tracksStr:(existing.tracks||[]).join(',')} : {name:'', role:'', tracksStr:'', notes:''};
+    ui.form = existing ? {...existing, phone: existing.phone||'', tracksStr:(existing.tracks||[]).join(',')} : {name:'', role:'', phone:'', tracksStr:'', notes:''};
   } else if(kind==='training'){
     ui.form = existing ? {...existing} : {unit:'', date:'', instructor:'', notes:''};
   } else if(kind==='request'){
-    ui.form = existing ? {...existing, date: existing.date||''} : {category: ui.view==='reqDash'?'dash':'app', title:'', requester:'', urgency:'medium', status:'pending', notes:'', date:''};
+    ui.form = existing ? {...existing, date: existing.date||'', track: existing.track||''} : {category: ui.view==='reqDash'?'dash':'app', title:'', requester:'', urgency:'medium', status:'pending', notes:'', date:'', track:''};
+  } else if(kind==='track'){
+    ui.form = existing ? {...existing, start: existing.start||'', end: existing.end||''} : {name:'', start:'', end:''};
   }
   render();
 }
-function closeAdd(){ ui.addOpen=false; ui.form=null; render(); }
+function closeAdd(){ ui.addOpen=false; ui.form=null; ui.formError=''; render(); }
 function setForm(k,v){ ui.form[k]=v; render(); }
+function setFormNumeric(k,v){ ui.form[k]=v.replace(/[^0-9\-+ ]/g,''); render(); }
 
 function submitAdd(){
   const f = ui.form;
@@ -326,7 +355,7 @@ function submitAdd(){
   } else if(ui.addKind==='partner'){
     if(!f.name || !f.name.trim()){ closeAdd(); return; }
     const tracks = (f.tracksStr||'').split(',').map(s=>Number(s.trim())).filter(Boolean);
-    const rec = { name:f.name, role:f.role||'', tracks, notes:f.notes||'' };
+    const rec = { name:f.name, role:f.role||'', phone:f.phone||'', tracks, notes:f.notes||'' };
     if(f.id){ state.partners = state.partners.map(p=>p.id===f.id?{...p,...rec}:p); }
     else { rec.id = state.nextPartnerId++; state.partners.push(rec); }
     ui.view='partners';
@@ -338,12 +367,22 @@ function submitAdd(){
     ui.view='trainings';
   } else if(ui.addKind==='request'){
     if(!f.title || !f.title.trim()){ closeAdd(); return; }
-    const rec = { category:f.category, title:f.title, requester:f.requester||'', urgency:f.urgency, status:f.status, notes:f.notes||'', date:f.date||null };
+    const rec = { category:f.category, title:f.title, requester:f.requester||'', urgency:f.urgency, status:f.status, notes:f.notes||'', date:f.date||null, track: f.track?Number(f.track):null };
     if(f.id){ state.requests = state.requests.map(r=>r.id===f.id?{...r,...rec}:r); }
     else { rec.id = state.nextRequestId++; state.requests.push(rec); }
     ui.view = f.category==='dash' ? 'reqDash' : 'reqApp';
+  } else if(ui.addKind==='track'){
+    if(!f.name || !f.name.trim() || !f.start || !f.end){
+      ui.formError = 'שם הטראק ותאריכי התחלה וסיום הם שדות חובה';
+      render();
+      return;
+    }
+    const rec = { name:f.name.trim(), start:f.start, end:f.end };
+    if(f.id){ state.tracks = state.tracks.map(t=>t.id===f.id?{...t,...rec}:t); }
+    else { rec.id = state.nextTrackId++; state.tracks.push(rec); }
+    ui.view='tracks';
   }
-  ui.addOpen=false; ui.form=null;
+  ui.addOpen=false; ui.form=null; ui.formError='';
   saveData();
 }
 
@@ -360,11 +399,11 @@ function deleteTrack(id){
   if(n>0 || ui.role!=='editor') return;
   askConfirm('למחוק את הטראק?', ()=>{ state.tracks=state.tracks.filter(t=>t.id!==id); saveData(); });
 }
-function addTrackPrompt(){
-  const name = (document.getElementById('newTrackName')||{}).value;
-  if(!name || !name.trim()) return;
-  state.tracks.push({ id: state.nextTrackId++, name: name.trim() });
-  saveData();
+function deleteTrackRec(){
+  const f=ui.form;
+  const n = state.items.filter(i=>i.track===f.id).length;
+  if(n>0) return;
+  askConfirm('למחוק את הטראק?', ()=>{ state.tracks=state.tracks.filter(t=>t.id!==f.id); ui.addOpen=false; ui.form=null; saveData(); });
 }
 
 // ==== Style helpers ====
@@ -504,68 +543,82 @@ function renderOverview(){
   </div>`;
 }
 
-function renderGantt(){
-  const milestones = state.items.filter(i=>i.type==='milestone');
-  const scheduled = milestones.filter(i=>i.start);
-  const tbd = milestones.filter(i=>!i.start);
+function quartersRange(){
   const quarters = [];
   for(let y=2026;y<=2028;y++) for(let q=1;q<=4;q++) quarters.push({q:'Q'+q,y:String(y)});
-  const rowsHtml = scheduled.map(i=>{
-    const from = qIndex(i.start), to = i.end?qIndex(i.end):from;
-    const st = STATUS[i.status];
-    return `
+  return quarters;
+}
+function renderTimelineCard(title, subtitle, legendHtml, rows, emptyMsg){
+  const quarters = quartersRange();
+  const rowsHtml = rows.map(r=>`
     <div style="height:52px;padding:0 16px;display:flex;flex-direction:column;justify-content:center;gap:2px;border-bottom:1px solid var(--border)">
-      <span style="font-size:13px;font-weight:500">${esc(i.name)}</span>
-      <span style="font-size:11px;color:var(--muted-foreground)">${esc(trackById(i.track).name)} · <span style="font-variant-numeric:tabular-nums">${fmt(i.start)} – ${fmt(i.end)}</span></span>
-    </div>`;
-  }).join('');
-  const barsHtml = scheduled.map(i=>{
-    const from = qIndex(i.start), to = i.end?qIndex(i.end):from;
-    const st = STATUS[i.status];
+      <span style="font-size:13px;font-weight:500">${esc(r.label)}</span>
+      <span style="font-size:11px;color:var(--muted-foreground)">${esc(r.sub)} · <span style="font-variant-numeric:tabular-nums">${fmt(r.start)} – ${fmt(r.end)}</span></span>
+    </div>`).join('');
+  const barsHtml = rows.map(r=>{
+    const from = qIndex(r.start), to = r.end?qIndex(r.end):from;
     const cells = quarters.map(()=>`<span style="height:52px;border-inline-end:1px solid var(--border)"></span>`).join('');
     return `
     <div style="height:52px;position:relative;border-bottom:1px solid var(--border);display:grid;grid-template-columns:repeat(12,1fr);align-items:center">
       ${cells}
-      <span style="grid-column:${from+1} / ${to+2};grid-row:1;height:22px;border-radius:6px;background:${st.solid};margin:0 4px;position:relative;z-index:2;overflow:hidden"></span>
+      <span style="grid-column:${from+1} / ${to+2};grid-row:1;height:22px;border-radius:6px;background:${r.color};margin:0 4px;position:relative;z-index:2;overflow:hidden"></span>
     </div>`;
   }).join('');
   const quartersHtml = quarters.map(q=>`
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;border-inline-end:1px solid var(--border);font-size:11px;color:var(--muted-foreground);gap:1px">
       <span style="font-weight:600;color:var(--foreground)">${q.q}</span><span>${q.y}</span>
     </div>`).join('');
+  return `
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-sm)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <strong style="font-size:14px;font-weight:600">${esc(title)}</strong>
+        <span style="font-size:12px;color:var(--muted-foreground)">${esc(subtitle)}</span>
+      </div>
+      <div style="display:flex;gap:14px;font-size:12px;color:var(--muted-foreground)">${legendHtml}</div>
+    </div>
+    ${rows.length===0 ? `<div style="padding:32px 18px;text-align:center;color:var(--muted-foreground);font-size:13px">${esc(emptyMsg)}</div>` : `
+    <div style="overflow-x:auto">
+      <div style="min-width:900px;display:grid;grid-template-columns:260px 1fr">
+        <div style="border-inline-end:1px solid var(--border);background:var(--card)">
+          <div style="height:44px;display:flex;align-items:center;padding:0 16px;font-size:12px;font-weight:600;color:var(--muted-foreground);border-bottom:1px solid var(--border)">שם</div>
+          ${rowsHtml}
+        </div>
+        <div>
+          <div style="height:44px;display:grid;grid-template-columns:repeat(12,1fr);border-bottom:1px solid var(--border)">${quartersHtml}</div>
+          ${barsHtml}
+        </div>
+      </div>
+    </div>`}
+  </div>`;
+}
+function renderGantt(){
+  const milestones = state.items.filter(i=>i.type==='milestone');
+  const scheduled = milestones.filter(i=>i.start);
+  const tbd = milestones.filter(i=>!i.start);
+  const tracksScheduled = state.tracks.filter(t=>t.start);
+
+  const milestoneLegend = `
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--emerald-500)"></span>הושלם</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--blue-500)"></span>בתהליך</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--gray-400)"></span>מתוכנן</span>`;
+  const milestoneRows = scheduled.map(i=>({ label:i.name, sub:trackById(i.track).name, start:i.start, end:i.end, color:STATUS[i.status].solid }));
+
+  const trackRows = state.tracks.map((t,i)=>({ t, color: TRACK_COLORS[i%8].solid })).filter(x=>x.t.start).map(x=>({
+    label: x.t.name, sub: 'טראק', start: x.t.start, end: x.t.end, color: x.color
+  }));
+  const trackLegend = `<span>פס לכל טראק שהוגדר לו תאריך התחלה וסיום</span>`;
+
   const tbdHtml = tbd.map(i=>`
     <span style="display:inline-flex;align-items:center;gap:8px;border:1px dashed var(--border);border-radius:9999px;padding:6px 12px;font-size:12px;background:var(--background)">
       <span style="width:7px;height:7px;border-radius:9999px;background:${STATUS[i.status].solid};flex-shrink:0"></span>
       <span style="font-weight:500">${esc(i.name)}</span><span style="color:var(--muted-foreground)">${esc(trackById(i.track).name)}</span>
     </span>`).join('');
+
   return `
   <div style="display:flex;flex-direction:column;gap:20px">
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-sm)">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap">
-        <div style="display:flex;flex-direction:column;gap:2px">
-          <strong style="font-size:14px;font-weight:600">ציר זמן אבני דרך · 2026–2028</strong>
-          <span style="font-size:12px;color:var(--muted-foreground)">רבעונים; פס לכל אבן דרך שהוגדרו לה תאריכים</span>
-        </div>
-        <div style="display:flex;gap:14px;font-size:12px;color:var(--muted-foreground)">
-          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--emerald-500)"></span>הושלם</span>
-          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--blue-500)"></span>בתהליך</span>
-          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--gray-400)"></span>מתוכנן</span>
-        </div>
-      </div>
-      ${scheduled.length===0 ? `<div style="padding:32px 18px;text-align:center;color:var(--muted-foreground);font-size:13px">אין עדיין אבני דרך עם תאריכים.</div>` : `
-      <div style="overflow-x:auto">
-        <div style="min-width:900px;display:grid;grid-template-columns:260px 1fr">
-          <div style="border-inline-end:1px solid var(--border);background:var(--card)">
-            <div style="height:44px;display:flex;align-items:center;padding:0 16px;font-size:12px;font-weight:600;color:var(--muted-foreground);border-bottom:1px solid var(--border)">טראק / אבן דרך</div>
-            ${rowsHtml}
-          </div>
-          <div>
-            <div style="height:44px;display:grid;grid-template-columns:repeat(12,1fr);border-bottom:1px solid var(--border)">${quartersHtml}</div>
-            ${barsHtml}
-          </div>
-        </div>
-      </div>`}
-    </div>
+    ${renderTimelineCard('טראקים על ציר הזמן · 2026–2028', 'רבעונים; טראק חדש עם תאריכים יופיע כאן מיד', trackLegend, trackRows, 'אין עדיין טראקים עם תאריכים. הוסיפו תאריכים במסך "טראקים".')}
+    ${renderTimelineCard('ציר זמן אבני דרך · 2026–2028', 'רבעונים; פס לכל אבן דרך שהוגדרו לה תאריכים', milestoneLegend, milestoneRows, 'אין עדיין אבני דרך עם תאריכים.')}
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow-sm)">
       <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
         <strong style="font-size:14px;font-weight:600">אבני דרך ללא תאריך</strong>
@@ -574,6 +627,40 @@ function renderGantt(){
       <div style="display:flex;flex-wrap:wrap;gap:8px">${tbdHtml || '<span style="font-size:13px;color:var(--muted-foreground)">אין אבני דרך ללא תאריך</span>'}</div>
     </div>
   </div>`;
+}
+
+function renderItemsKanban(filtered){
+  const canEdit = ui.role==='editor';
+  const order = ['planned','ongoing','done'];
+  const cols = order.map(key=>{
+    const cards = filtered.filter(i=>i.status===key);
+    const cardsHtml = cards.map(it=>{
+      const c = trackColor(it.track);
+      return `
+      <div draggable="${canEdit}" ondragstart="onDragStart('item', ${it.id})" onclick='openAdd("item", ${JSON.stringify(it).replace(/'/g,"&#39;")})' style="border:1px solid var(--border);border-radius:8px;background:var(--background);padding:10px 12px;display:flex;flex-direction:column;gap:8px;cursor:pointer">
+        <span style="font-size:12px;line-height:1.5;font-weight:500">${esc(it.name)}</span>
+        <span style="font-size:11px;color:var(--muted-foreground);line-height:1.45">${esc(it.notes||'')}</span>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="${smallBadge(c)}">${esc(trackById(it.track).name)}</span>
+          <span style="font-size:11px;color:var(--muted-foreground)">${it.type==='milestone'?'אבן דרך':'משימה'}</span>
+          <span style="flex:1"></span>
+          <span style="font-size:11px;color:var(--muted-foreground)">${esc(it.owner||'—')}</span>
+        </div>
+      </div>`;
+    }).join('');
+    return `
+    <div ondragover="event.preventDefault()" ondrop="onDropColumn('item', '${key}')" style="background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm)">
+      <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border)">
+        <span style="width:8px;height:8px;border-radius:9999px;background:${STATUS[key].solid};flex-shrink:0"></span>
+        <span style="font-size:13px;font-weight:600;flex:1">${STATUS[key].label}</span>
+        <span style="font-size:12px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${cards.length}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding:12px;max-height:620px;overflow-y:auto;min-height:80px">
+        ${cardsHtml || '<span style="font-size:12px;color:var(--muted-foreground);text-align:center;padding:18px 8px;border:1px dashed var(--border);border-radius:8px">אין פריטים בעמודה הזו</span>'}
+      </div>
+    </div>`;
+  }).join('');
+  return `<div style="display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:12px;align-items:start">${cols}</div>`;
 }
 
 function renderItems(){
@@ -606,9 +693,26 @@ function renderItems(){
       </span>
     </div>`;
   }).join('');
+  const tableHtml = `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow-x:auto;box-shadow:var(--shadow-sm)">
+      <div style="min-width:940px">
+        <div style="display:grid;grid-template-columns:170px minmax(220px,1fr) 96px 190px 110px 96px 96px 84px;gap:0;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
+          <span>טראק</span><span>שם הפריט</span><span>סוג</span><span>שותף / אחראי</span><span>סטטוס</span><span>התחלה</span><span>סיום</span><span></span>
+        </div>
+        ${rowsHtml || `<div style="border-top:1px solid var(--border);padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+          <strong style="font-size:14px;font-weight:600">לא נמצאו פריטים</strong>
+          <span style="font-size:13px;color:var(--muted-foreground);max-width:320px">אין פריטים שמתאימים לסינון הנוכחי. אפשר לנקות את הסינון ולנסות מחדש.</span>
+          <button type="button" onclick="clearFilters()" style="margin-top:6px;height:34px;padding:0 14px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;cursor:pointer">ניקוי סינון</button>
+        </div>`}
+      </div>
+    </div>`;
   return `
   <div style="display:flex;flex-direction:column;gap:16px">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <div style="display:flex;gap:4px;background:var(--muted);border-radius:8px;padding:3px">
+        <button type="button" onclick="setItemsView('kanban')" style="${tabStyle(ui.itemsView==='kanban')}">קנבן</button>
+        <button type="button" onclick="setItemsView('table')" style="${tabStyle(ui.itemsView==='table')}">טבלה</button>
+      </div>
       <input id="itemsSearch" type="search" placeholder="חיפוש לפי שם פריט" value="${esc(ui.query)}" oninput="onItemsSearch(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;width:240px;outline:none" />
       <select onchange="onTrackFilter(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;outline:none"><option value="">כל הטראקים</option>${trackOpts}</select>
       <select onchange="onStatusFilter(this.value)" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;outline:none">
@@ -621,18 +725,7 @@ function renderItems(){
       <span style="flex:1"></span>
       <span style="font-size:12px;color:var(--muted-foreground)">${filtered.length} מתוך ${state.items.length} פריטים</span>
     </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow-x:auto;box-shadow:var(--shadow-sm)">
-      <div style="min-width:940px">
-        <div style="display:grid;grid-template-columns:170px minmax(220px,1fr) 96px 190px 110px 96px 96px 84px;gap:0;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
-          <span>טראק</span><span>שם הפריט</span><span>סוג</span><span>שותף / אחראי</span><span>סטטוס</span><span>התחלה</span><span>סיום</span><span></span>
-        </div>
-        ${rowsHtml || `<div style="border-top:1px solid var(--border);padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
-          <strong style="font-size:14px;font-weight:600">לא נמצאו פריטים</strong>
-          <span style="font-size:13px;color:var(--muted-foreground);max-width:320px">אין פריטים שמתאימים לסינון הנוכחי. אפשר לנקות את הסינון ולנסות מחדש.</span>
-          <button type="button" onclick="clearFilters()" style="margin-top:6px;height:34px;padding:0 14px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;cursor:pointer">ניקוי סינון</button>
-        </div>`}
-      </div>
-    </div>
+    ${ui.itemsView==='kanban' ? renderItemsKanban(filtered) : tableHtml}
   </div>`;
 }
 
@@ -644,11 +737,12 @@ function renderPartners(){
     const linked = items.filter(i=>(i.owner||'').includes(p.name)).length;
     const tracksHtml = (p.tracks||[]).map(id=>{ const t=trackById(id); if(!t) return ''; return `<span style="${smallBadge(trackColor(id))}">${esc(t.name)}</span>`; }).join('');
     return `
-    <div style="display:grid;grid-template-columns:minmax(220px,1fr) 250px minmax(200px,1fr) 140px;padding:12px 16px;align-items:center;border-top:1px solid var(--border);font-size:13px">
+    <div style="display:grid;grid-template-columns:minmax(200px,1fr) 130px 220px minmax(180px,1fr) 140px;padding:12px 16px;align-items:center;border-top:1px solid var(--border);font-size:13px">
       <span style="display:flex;flex-direction:column;gap:2px;padding-inline-end:12px">
         <span style="font-weight:500">${esc(p.name)}</span>
         <span style="font-size:11px;color:var(--muted-foreground)">${esc(p.notes||'—')}</span>
       </span>
+      <span style="font-size:12px;color:var(--muted-foreground);font-variant-numeric:tabular-nums;direction:ltr;text-align:end">${esc(p.phone||'—')}</span>
       <span style="font-size:12px;color:var(--muted-foreground);padding-inline-end:12px;line-height:1.45">${esc(p.role||'')}</span>
       <span style="display:flex;flex-wrap:wrap;gap:6px;padding-inline-end:12px">${tracksHtml}</span>
       <span style="display:flex;align-items:center;gap:8px">
@@ -666,9 +760,9 @@ function renderPartners(){
       ${canEdit?`<button type="button" onclick="openAdd('partner')" style="height:36px;padding:0 14px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;cursor:pointer">הוספת שותף</button>`:''}
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow-x:auto;box-shadow:var(--shadow-sm)">
-      <div style="min-width:880px">
-        <div style="display:grid;grid-template-columns:minmax(220px,1fr) 250px minmax(200px,1fr) 140px;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
-          <span>שותף / גורם</span><span>תפקיד בפרויקט</span><span>טראקים</span><span>פריטים מקושרים</span>
+      <div style="min-width:960px">
+        <div style="display:grid;grid-template-columns:minmax(200px,1fr) 130px 220px minmax(180px,1fr) 140px;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
+          <span>שותף / גורם</span><span>טלפון</span><span>תפקיד בפרויקט</span><span>טראקים</span><span>פריטים מקושרים</span>
         </div>
         ${rowsHtml || `<div style="padding:32px;text-align:center;color:var(--muted-foreground);font-size:13px">אין עדיין שותפים</div>`}
       </div>
@@ -681,25 +775,27 @@ function renderTracks(){
   const rowsHtml = state.tracks.map((t,i)=>{
     const n = state.items.filter(it=>it.track===t.id).length;
     const c = TRACK_COLORS[i%8];
-    const blocked = n>0 || !canEdit;
+    const blocked = n>0;
+    const dateLabel = t.start ? `${fmt(t.start)} – ${t.end?fmt(t.end):'—'}` : 'ללא תאריכים מוגדרים';
     return `
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-sm)">
       <span style="width:10px;height:34px;border-radius:4px;background:${c.solid};flex-shrink:0"></span>
       <span style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
         <span style="font-size:13px;font-weight:600">${esc(t.name)}</span>
-        <span style="font-size:11px;color:var(--muted-foreground)">${n?n+' פריטים משויכים':'אין פריטים משויכים'}</span>
+        <span style="font-size:11px;color:var(--muted-foreground)">${n?n+' פריטים משויכים':'אין פריטים משויכים'} · <span style="font-variant-numeric:tabular-nums">${dateLabel}</span></span>
       </span>
+      ${canEdit?`<button type="button" onclick='openAdd("track", ${JSON.stringify(t).replace(/'/g,"&#39;")})' style="height:30px;padding:0 12px;border-radius:8px;font-size:12px;font-family:inherit;border:1px solid var(--input);background:var(--background);color:var(--foreground);cursor:pointer">עריכה</button>`:''}
       <button type="button" onclick="deleteTrack(${t.id})" title="${blocked?'לא ניתן למחוק — משויכים לו פריטים':'מחיקת הטראק'}"
-        style="height:30px;padding:0 12px;border-radius:8px;font-size:12px;font-family:inherit;border:1px solid var(--input);background:var(--background);color:${blocked?'var(--muted-foreground)':'var(--red-600)'};cursor:${blocked?'not-allowed':'pointer'};opacity:${blocked?.55:1}">מחיקה</button>
+        style="height:30px;padding:0 12px;border-radius:8px;font-size:12px;font-family:inherit;border:1px solid var(--input);background:var(--background);color:${blocked||!canEdit?'var(--muted-foreground)':'var(--red-600)'};cursor:${blocked||!canEdit?'not-allowed':'pointer'};opacity:${blocked||!canEdit?.55:1}">מחיקה</button>
     </div>`;
   }).join('');
   return `
   <div style="display:flex;flex-direction:column;gap:16px">
-    <span style="font-size:13px;color:var(--muted-foreground)">לא ניתן למחוק טראק שמשויכים אליו פריטים — כפתור המחיקה חסום.</span>
-    ${ui.role==='editor' ? `<div style="display:flex;gap:8px;align-items:center">
-      <input id="newTrackName" type="text" placeholder="שם טראק חדש" style="height:36px;padding:0 12px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;width:260px" />
-      <button type="button" onclick="addTrackPrompt()" style="height:36px;padding:0 14px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-foreground);font-size:13px;font-weight:500;cursor:pointer">הוספת טראק</button>
-    </div>` : ''}
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:13px;color:var(--muted-foreground)">לא ניתן למחוק טראק שמשויכים אליו פריטים. תאריכי התחלה וסיום הם שדה חובה בטראק חדש, והוא יופיע מיד בגאנט.</span>
+      <span style="flex:1"></span>
+      ${canEdit?`<button type="button" onclick="openAdd('track')" style="height:36px;padding:0 14px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-foreground);font-size:13px;font-weight:500;cursor:pointer">הוספת טראק</button>`:''}
+    </div>
     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">${rowsHtml}</div>
   </div>`;
 }
@@ -740,52 +836,61 @@ function renderRequests(category){
     </div>`;
   }
 
+  const canDrag = ui.role==='editor';
   const decorate = r => ({ ...r, u:URGENCY[r.urgency], st:REQ_STATUS[r.status] });
   if(ui.reqView==='kanban'){
     const cols = REQ_STATUS_ORDER.map(key=>{
       const cards = filtered.filter(r=>r.status===key).map(decorate);
-      const cardsHtml = cards.map(r=>`
-        <div onclick='openAdd("request", ${JSON.stringify(r).replace(/'/g,"&#39;")})' style="border:1px solid var(--border);border-radius:8px;background:var(--background);padding:10px 12px;display:flex;flex-direction:column;gap:8px;cursor:pointer">
+      const cardsHtml = cards.map(r=>{
+        const trackBadge = r.track ? `<span style="${smallBadge(trackColor(r.track))}">${esc(trackById(r.track)?.name||'')}</span>` : '';
+        return `
+        <div draggable="${canDrag}" ondragstart="onDragStart('request', ${r.id})" onclick='openAdd("request", ${JSON.stringify(r).replace(/'/g,"&#39;")})' style="border:1px solid var(--border);border-radius:8px;background:var(--background);padding:10px 12px;display:flex;flex-direction:column;gap:8px;cursor:pointer">
           <span style="font-size:12px;line-height:1.5;font-weight:500">${esc(r.title)}</span>
           <span style="font-size:11px;color:var(--muted-foreground);line-height:1.45">${esc(r.notes||'')}</span>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="${smallBadge(r.u)}">${r.u.label}</span>
+            ${trackBadge}
             <span style="font-size:11px;color:var(--muted-foreground)">${esc(r.requester||'ללא מבקש מתועד')}</span>
             <span style="flex:1"></span>
             <span style="font-size:11px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${r.date?fmt(r.date):'—'}</span>
           </div>
-        </div>`).join('');
+        </div>`;
+      }).join('');
       return `
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm)">
+      <div ondragover="event.preventDefault()" ondrop="onDropColumn('request', '${key}')" style="background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm)">
         <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border)">
           <span style="width:8px;height:8px;border-radius:9999px;background:${REQ_STATUS[key].solid};flex-shrink:0"></span>
           <span style="font-size:13px;font-weight:600;flex:1">${REQ_STATUS[key].label}</span>
           <span style="font-size:12px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${cards.length}</span>
         </div>
-        <div style="display:flex;flex-direction:column;gap:8px;padding:12px;max-height:620px;overflow-y:auto">
+        <div style="display:flex;flex-direction:column;gap:8px;padding:12px;max-height:620px;overflow-y:auto;min-height:80px">
           ${cardsHtml || '<span style="font-size:12px;color:var(--muted-foreground);text-align:center;padding:18px 8px;border:1px dashed var(--border);border-radius:8px">אין בקשות בעמודה הזו</span>'}
         </div>
       </div>`;
     }).join('');
     return `<div style="display:flex;flex-direction:column;gap:16px">${toolbar}<div style="display:grid;grid-template-columns:repeat(5,minmax(210px,1fr));gap:12px;align-items:start">${cols}</div></div>`;
   }
-  const rowsHtml = filtered.map(decorate).map(r=>`
-    <div onclick='openAdd("request", ${JSON.stringify(r).replace(/'/g,"&#39;")})' style="display:grid;grid-template-columns:minmax(300px,1fr) 110px 160px 110px 140px;padding:10px 16px;align-items:center;border-top:1px solid var(--border);font-size:13px;cursor:pointer">
+  const rowsHtml = filtered.map(decorate).map(r=>{
+    const trackBadge = r.track ? `<span style="${smallBadge(trackColor(r.track))}">${esc(trackById(r.track)?.name||'')}</span>` : '';
+    return `
+    <div onclick='openAdd("request", ${JSON.stringify(r).replace(/'/g,"&#39;")})' style="display:grid;grid-template-columns:minmax(260px,1fr) 140px 110px 160px 110px 140px;padding:10px 16px;align-items:center;border-top:1px solid var(--border);font-size:13px;cursor:pointer">
       <span style="display:flex;flex-direction:column;gap:2px;padding-inline-end:14px">
         <span style="font-weight:500">${esc(r.title)}</span>
         <span style="font-size:11px;color:var(--muted-foreground)">${esc(r.notes||'')}</span>
       </span>
+      <span>${trackBadge}</span>
       <span style="font-size:12px;color:var(--muted-foreground);font-variant-numeric:tabular-nums">${r.date?fmt(r.date):'—'}</span>
       <span style="font-size:12px;color:var(--muted-foreground)">${esc(r.requester||'—')}</span>
       <span><span style="${smallBadge(r.u)}">${r.u.label}</span></span>
       <span><span style="${smallBadge(r.st)}">${r.st.label}</span></span>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   return `
   <div style="display:flex;flex-direction:column;gap:16px">${toolbar}
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow-x:auto;box-shadow:var(--shadow-sm)">
-      <div style="min-width:920px">
-        <div style="display:grid;grid-template-columns:minmax(300px,1fr) 110px 160px 110px 140px;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
-          <span>תיאור הבקשה</span><span>תאריך</span><span>מבקש</span><span>דחיפות</span><span>סטטוס</span>
+      <div style="min-width:1000px">
+        <div style="display:grid;grid-template-columns:minmax(260px,1fr) 140px 110px 160px 110px 140px;padding:0 16px;height:42px;align-items:center;background:var(--muted);font-size:12px;font-weight:600;color:var(--muted-foreground)">
+          <span>תיאור הבקשה</span><span>טראק</span><span>תאריך</span><span>מבקש</span><span>דחיפות</span><span>סטטוס</span>
         </div>
         ${rowsHtml}
       </div>
@@ -847,14 +952,23 @@ function renderModal(){
     </div>`;
     if(f.id) deleteBtn = `<button type="button" onclick="deleteItemRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
   } else if(ui.addKind==='partner'){
-    title = f.id ? 'עריכת שותף' : 'הוספת שותף'; sub='שם, תפקיד וטראקים רלוונטיים';
+    title = f.id ? 'עריכת שותף' : 'הוספת שותף'; sub='שם, טלפון, תפקיד וטראקים רלוונטיים';
     fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
-      ${fieldWrap('שם השותף / הגורם', `<input type="text" value="${esc(f.name)}" id="f-name" oninput="setForm('name', this.value)" style="${CTRL}" />`)}
-      ${fieldWrap('תפקיד בפרויקט', `<input type="text" value="${esc(f.role)}" id="f-role" oninput="setForm('role', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('שם השותף', `<input type="text" value="${esc(f.name)}" id="f-name" oninput="setForm('name', this.value)" placeholder="טקסט חופשי" style="${CTRL}" />`)}
+      ${fieldWrap('מספר טלפון', `<input type="tel" inputmode="numeric" value="${esc(f.phone)}" id="f-phone" oninput="setFormNumeric('phone', this.value)" placeholder="לדוגמה: 0501234567" style="${CTRL}direction:ltr;text-align:end;" />`)}
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">תפקיד בפרויקט<input type="text" value="${esc(f.role)}" id="f-role" oninput="setForm('role', this.value)" style="${CTRL}" /></label>
       <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">מזהי טראקים (מופרדים בפסיק, לדוגמה 1,2)<input type="text" value="${esc(f.tracksStr)}" id="f-tracksStr" oninput="setForm('tracksStr', this.value)" style="${CTRL}" /></label>
       <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea id="f-notes" oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
     </div>`;
     if(f.id) deleteBtn = `<button type="button" onclick="deletePartnerRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
+  } else if(ui.addKind==='track'){
+    title = f.id ? 'עריכת טראק' : 'טראק חדש'; sub='שם ותאריכי התחלה/סיום — שדות חובה; הטראק יופיע מיד בגאנט';
+    fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+      <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">שם הטראק<input type="text" value="${esc(f.name)}" id="f-name" oninput="setForm('name', this.value)" placeholder="לדוגמה: אבטחת מידע" style="${CTRL}" /></label>
+      ${fieldWrap('תאריך התחלה *', `<input type="date" value="${esc(f.start)}" id="f-start" oninput="setForm('start', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('תאריך סיום *', `<input type="date" value="${esc(f.end)}" id="f-end" oninput="setForm('end', this.value)" style="${CTRL}" />`)}
+    </div>`;
+    if(f.id) deleteBtn = `<button type="button" onclick="deleteTrackRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
   } else if(ui.addKind==='training'){
     title = f.id ? 'עריכת הדרכה' : 'תיעוד הדרכה'; sub='יחידה, תאריך ומדריך';
     fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
@@ -866,10 +980,12 @@ function renderModal(){
     if(f.id) deleteBtn = `<button type="button" onclick="deleteTrainingRec()" style="height:36px;padding:0 16px;border:1px solid var(--red-500);border-radius:10px;background:var(--background);color:var(--red-600);font-size:13px;cursor:pointer;margin-inline-start:auto">מחיקה</button>`;
   } else if(ui.addKind==='request'){
     title = f.id ? 'עריכת בקשת שיפור' : 'בקשת שיפור חדשה'; sub = f.category==='dash' ? 'לדשבורד' : 'לאפליקציה';
+    const trackReqOpts = state.tracks.map(t=>`<option value="${t.id}" ${String(f.track)===String(t.id)?'selected':''}>${esc(t.name)}</option>`).join('');
     fields = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
       <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">תיאור הבקשה<input type="text" value="${esc(f.title)}" id="f-title" oninput="setForm('title', this.value)" style="${CTRL}" /></label>
       ${fieldWrap('מבקש', `<input type="text" value="${esc(f.requester)}" id="f-requester" oninput="setForm('requester', this.value)" style="${CTRL}" />`)}
       ${fieldWrap('תאריך', `<input type="date" value="${esc(f.date)}" id="f-date" oninput="setForm('date', this.value)" style="${CTRL}" />`)}
+      ${fieldWrap('טראק (אופציונלי)', `<select id="f-track" onchange="setForm('track', this.value)" style="${CTRL}"><option value="">ללא שיוך</option>${trackReqOpts}</select>`)}
       ${fieldWrap('דחיפות', `<select id="f-urgency" onchange="setForm('urgency', this.value)" style="${CTRL}">${Object.keys(URGENCY).map(k=>`<option value="${k}" ${f.urgency===k?'selected':''}>${URGENCY[k].label}</option>`).join('')}</select>`)}
       ${fieldWrap('סטטוס', `<select id="f-status" onchange="setForm('status', this.value)" style="${CTRL}">${REQ_STATUS_ORDER.map(k=>`<option value="${k}" ${f.status===k?'selected':''}>${REQ_STATUS[k].label}</option>`).join('')}</select>`)}
       <label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted-foreground)">הערות<textarea id="f-notes" oninput="setForm('notes', this.value)" rows="2" style="${CTRL}height:auto;padding:8px 12px;">${esc(f.notes||'')}</textarea></label>
@@ -878,12 +994,13 @@ function renderModal(){
   }
   return `
   <div onclick="closeAdd()" style="position:fixed;inset:0;background:var(--overlay-scrim);display:flex;align-items:center;justify-content:center;z-index:40;padding:24px">
-    <div onclick="event.stopPropagation()" style="background:var(--card);color:var(--foreground);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-overlay);width:min(560px,100%);max-height:86vh;overflow:auto;padding:22px;display:flex;flex-direction:column;gap:16px">
+    <div id="modalScroll" onclick="event.stopPropagation()" style="background:var(--card);color:var(--foreground);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-overlay);width:min(560px,100%);max-height:86vh;overflow:auto;padding:22px;display:flex;flex-direction:column;gap:16px">
       <div style="display:flex;flex-direction:column;gap:4px">
         <strong style="font-size:16px;font-weight:600">${esc(title)}</strong>
         <span style="font-size:12px;color:var(--muted-foreground)">${esc(sub)}</span>
       </div>
       ${fields}
+      ${ui.formError ? `<div style="font-size:12px;color:var(--red-600)">${esc(ui.formError)}</div>` : ''}
       <div style="display:flex;justify-content:flex-start;gap:8px;padding-top:4px">
         <button type="button" onclick="submitAdd()" style="height:36px;padding:0 16px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-foreground);font-size:13px;font-weight:500;cursor:pointer">${f.id?'שמירה':'הוספה'}</button>
         <button type="button" onclick="closeAdd()" style="height:36px;padding:0 16px;border:1px solid var(--input);border-radius:10px;background:var(--background);color:var(--foreground);font-size:13px;cursor:pointer">ביטול</button>
@@ -927,7 +1044,7 @@ function renderApp(){
     ${renderSidebar()}
     <main style="flex:1;min-width:0;display:flex;flex-direction:column">
       ${renderHeader()}
-      <div style="flex:1;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:20px">${renderContent()}</div>
+      <div id="mainContent" style="flex:1;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:20px">${renderContent()}</div>
     </main>
     ${renderModal()}
     ${renderConfirm()}
