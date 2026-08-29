@@ -234,6 +234,7 @@ let ui = {
 };
 let dragPayload = null;
 let AUTH_FNS = null;
+let DB_FNS = null;
 
 function trackById(id){ return state.tracks.find(t=>t.id===id); }
 function trackColor(id){ const idx = state.tracks.findIndex(t=>t.id===id); return TRACK_COLORS[(idx<0?0:idx)%8]; }
@@ -319,8 +320,18 @@ async function submitLogin(e){
   if(!AUTH_FNS){ f.err='שירות ההתחברות אינו זמין כרגע'; render(); return; }
   f.loading=true; f.err=''; render();
   try{
+    // Usernames aren't always valid email local-parts (e.g. Hebrew) — look up the
+    // real internal auth email in Firestore first, falling back to the default
+    // <username>@shov-roadmap.app mapping when no override is registered.
+    let authEmail = f.username.trim()+'@shov-roadmap.app';
+    if(DB_FNS && window.db){
+      try{
+        const snap = await DB_FNS.getDoc(DB_FNS.doc(window.db, 'usernames', f.username.trim()));
+        if(snap.exists() && snap.data().authEmail) authEmail = snap.data().authEmail;
+      } catch(lookupErr){ console.warn('username lookup failed, using default mapping', lookupErr); }
+    }
     await AUTH_FNS.setPersistence(window.auth, f.remember ? AUTH_FNS.browserLocalPersistence : AUTH_FNS.browserSessionPersistence);
-    await AUTH_FNS.signInWithEmailAndPassword(window.auth, f.username.trim()+'@shov-roadmap.app', f.password);
+    await AUTH_FNS.signInWithEmailAndPassword(window.auth, authEmail, f.password);
     // onAuthStateChanged handles the rest of the flow
   } catch(err){
     console.error(err);
@@ -1176,6 +1187,8 @@ function renderApp(){
     const { getFirestore, doc, getDoc, setDoc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js");
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    window.db = db;
+    DB_FNS = { doc, getDoc };
     const COLLECTION = 'roadmap_data';
     window.storage = {
       get: async (key) => { const snap = await getDoc(doc(db, COLLECTION, key)); return snap.exists() ? { value: snap.data().value } : null; },
