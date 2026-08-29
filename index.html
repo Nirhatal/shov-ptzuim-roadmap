@@ -1189,6 +1189,11 @@ function renderApp(){
 
 // ==== Firebase storage shim + boot ====
 (async function initStorageAndLoad(){
+  // Firestore rules require a signed-in user, so real data can't be fetched
+  // until login succeeds. Show the seed data as a static fallback on the
+  // login screen in the meantime (matches its own tolerance for stale counts).
+  state = seed();
+  let dataSyncAttached = false;
   try{
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js");
     const { getFirestore, doc, getDoc, setDoc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js");
@@ -1201,15 +1206,20 @@ function renderApp(){
       get: async (key) => { const snap = await getDoc(doc(db, COLLECTION, key)); return snap.exists() ? { value: snap.data().value } : null; },
       set: async (key, value) => { await setDoc(doc(db, COLLECTION, key), { value, updatedAt: Date.now() }); return true; }
     };
-    onSnapshot(doc(db, COLLECTION, STORAGE_KEY), (snap) => {
-      if(!snap.exists()) return;
-      const remoteState = JSON.parse(snap.data().value);
-      if(JSON.stringify(remoteState) !== JSON.stringify(state)){
-        state = { ...seed(), ...remoteState };
-        ui.saveState = 'עודכן בזמן אמת';
-        render();
-      }
-    });
+    function attachDataSync(){
+      if(dataSyncAttached) return;
+      dataSyncAttached = true;
+      loadData();
+      onSnapshot(doc(db, COLLECTION, STORAGE_KEY), (snap) => {
+        if(!snap.exists()) return;
+        const remoteState = JSON.parse(snap.data().value);
+        if(JSON.stringify(remoteState) !== JSON.stringify(state)){
+          state = { ...seed(), ...remoteState };
+          ui.saveState = 'עודכן בזמן אמת';
+          render();
+        }
+      }, (err) => { console.warn('onSnapshot error:', err); });
+    }
 
     // ==== Authentication (real Firebase Auth) ====
     try{
@@ -1226,6 +1236,7 @@ function renderApp(){
         ui.authChecking = false;
         if(user){
           ui.authUser = { uid: user.uid, username: (user.email||'').split('@')[0] };
+          attachDataSync();
         } else {
           ui.authUser = null;
           ui.loginForm = { username: '', password: '', reveal: false, remember: true, loading: false, err: '' };
@@ -1235,6 +1246,7 @@ function renderApp(){
     } catch(authErr){
       console.error('שירות ההתחברות (Firebase Auth) לא זמין:', authErr);
       ui.authChecking = false;
+      attachDataSync();
       render();
     }
   } catch(e){
@@ -1244,8 +1256,9 @@ function renderApp(){
       set: async (key, value) => { localStorage.setItem(key, value); return true; }
     };
     ui.authChecking = false;
+    loadData();
   }
-  loadData();
+  render();
 })();
 </script>
 </body>
