@@ -1088,19 +1088,32 @@ function renderLogin(){
   const adminMailto = 'mailto:nirlevi12346@gmail.com?subject=' + encodeURIComponent('בעיה בהתחברות — שו״ב פצועים Roadmap');
   const forgotMailto = 'mailto:nirlevi12346@gmail.com?subject=' + encodeURIComponent('שכחתי סיסמה — שו״ב פצועים Roadmap');
   return `
-  <div dir="rtl" lang="he" style="min-height:100vh;display:flex;background:var(--background);color:var(--foreground);font-family:var(--font-hebrew);font-size:14px;line-height:1.5;width:100%">
-    <section style="flex:1 1 46%;position:relative;overflow:hidden;background:var(--blue-950);color:#fff;padding:56px 56px 40px;display:flex;flex-direction:column;justify-content:space-between;min-width:0">
-      <div style="position:absolute;inset:-20% -30% auto auto;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.10), rgba(255,255,255,0) 68%);pointer-events:none"></div>
-      <div style="position:absolute;inset:auto auto -180px -140px;width:480px;height:480px;border-radius:50%;border:1px solid rgba(255,255,255,.10);pointer-events:none"></div>
-      <div style="position:absolute;inset:auto auto -240px -200px;width:620px;height:620px;border-radius:50%;border:1px solid rgba(255,255,255,.06);pointer-events:none"></div>
-      <header style="position:relative;display:flex;align-items:center;gap:14px">
+  <style>
+    .login-root{min-height:100vh;display:flex;width:100%}
+    .login-brand{flex:1 1 46%;position:relative;overflow:hidden;background:var(--blue-950);color:#fff;padding:56px 56px 40px;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+    .login-brand-header{position:relative;display:flex;align-items:center;gap:14px;min-width:0}
+    .login-brand-header strong{white-space:nowrap;flex-shrink:0}
+    .login-form-wrap{flex:1 1 54%;display:flex;align-items:center;justify-content:center;padding:48px 40px;min-width:0}
+    @media (max-width:900px){
+      .login-root{flex-direction:column}
+      .login-brand{flex:0 0 auto;padding:32px 24px 24px}
+      .login-brand-para,.login-counters,.login-brand-footer,.login-decor{display:none}
+      .login-form-wrap{padding:32px 20px}
+    }
+  </style>
+  <div dir="rtl" lang="he" class="login-root" style="background:var(--background);color:var(--foreground);font-family:var(--font-hebrew);font-size:14px;line-height:1.5">
+    <section class="login-brand">
+      <div class="login-decor" style="position:absolute;inset:-20% -30% auto auto;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.10), rgba(255,255,255,0) 68%);pointer-events:none"></div>
+      <div class="login-decor" style="position:absolute;inset:auto auto -180px -140px;width:480px;height:480px;border-radius:50%;border:1px solid rgba(255,255,255,.10);pointer-events:none"></div>
+      <div class="login-decor" style="position:absolute;inset:auto auto -240px -200px;width:620px;height:620px;border-radius:50%;border:1px solid rgba(255,255,255,.06);pointer-events:none"></div>
+      <header class="login-brand-header">
         <img src="${EMBLEM_SRC}" alt="סמל חיל הרפואה" style="width:112px;height:112px;border-radius:14px;object-fit:contain;flex-shrink:0" />
         <strong style="font-size:24px;font-weight:600;letter-spacing:.01em">חיל הרפואה</strong>
       </header>
       <div style="position:relative;display:flex;flex-direction:column;gap:22px;max-width:460px">
         <h1 style="margin:0;font-size:44px;line-height:1.15;font-weight:600;letter-spacing:-.01em">ניהול פרוייקט<br />שו״ב פצועים</h1>
-        <p style="margin:0;font-size:15px;color:rgba(255,255,255,.72);max-width:400px">מרחב עבודה אחד לטראקים, אבני דרך, שותפים ובקשות שיפור — עם תמונת מצב מעודכנת לכל אורך הפרוייקט.</p>
-        <div style="display:flex;gap:34px;padding-top:6px">
+        <p class="login-brand-para" style="margin:0;font-size:15px;color:rgba(255,255,255,.72);max-width:400px">מרחב עבודה אחד לטראקים, אבני דרך, שותפים ובקשות שיפור — עם תמונת מצב מעודכנת לכל אורך הפרוייקט.</p>
+        <div class="login-counters" style="display:flex;gap:34px;padding-top:6px">
           <span style="display:flex;flex-direction:column;gap:2px">
             <strong style="font-size:26px;font-weight:600">${trackCount}</strong>
             <span style="font-size:12px;color:rgba(255,255,255,.6)">טראקים</span>
@@ -1115,9 +1128,9 @@ function renderLogin(){
           </span>
         </div>
       </div>
-      <p style="position:relative;margin:0;font-size:12px;color:rgba(255,255,255,.45)">מערכת פנימית — הכניסה למשתמשים מורשים בלבד</p>
+      <p class="login-brand-footer" style="position:relative;margin:0;font-size:12px;color:rgba(255,255,255,.45)">מערכת פנימית — הכניסה למשתמשים מורשים בלבד</p>
     </section>
-    <section style="flex:1 1 54%;display:flex;align-items:center;justify-content:center;padding:48px 40px;min-width:0">
+    <section class="login-form-wrap">
       <div style="width:100%;max-width:392px;display:flex;flex-direction:column;gap:26px">
         <div style="display:flex;flex-direction:column;gap:6px">
           <h2 style="margin:0;font-size:26px;font-weight:600;letter-spacing:-.01em">כניסה למערכת</h2>
